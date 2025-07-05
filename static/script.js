@@ -1,4 +1,9 @@
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE = "https://meranaw-api.onrender.com";
+
+fetch(`${API_BASE}/api/search?query=life`)
+  .then(res => res.json())
+  .then(data => console.log(data));
+
 
 // ============================================
 // GLOBAL VARIABLES AND DOM ELEMENTS
