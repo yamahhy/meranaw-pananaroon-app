@@ -1,4 +1,4 @@
-const API_BASE = "https://meranaw-api.onrender.com";
+const API_BASE = "https://meranaw-pananaroon-app.onrender.com";
 
 fetch(`${API_BASE}/api/search?query=life`)
   .then(res => res.json())
@@ -613,7 +613,7 @@ async function performSearch() {
   showSearchView();
 
   try {
-    const response = await fetch(`http://localhost:8000/api/search?query=${encodeURIComponent(query)}`);
+    const response = await fetch(`${BASE_URL}/api/search?query=${encodeURIComponent(query)}`);
     
     if (!response.ok) throw new Error("Search request failed.");
 
@@ -716,7 +716,7 @@ async function generateInterpretation() {
   elements.container.classList.remove("hidden");
 
   try {
-    const response = await fetch("http://localhost:8000/api/meranaw-interpreter", {
+    const response = await fetch(await fetch(`${BASE_URL}/api/meranaw-interpreter`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -750,8 +750,7 @@ async function playAudio(text, lang) {
   }
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/speak_proverb?text=${encodeURIComponent(text)}&lang=${lang}`);
-
+    const response = await fetch(`${BASE_URL}/api/speak_proverb?text=${encodeURIComponent(text)}&lang=${lang}`);
     if (!response.ok) {
       const errorData = await response.json();
       alert(`Error playing audio: ${errorData.detail || response.statusText}`);
