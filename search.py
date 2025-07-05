@@ -7,7 +7,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 # --- LOAD DATA AND MODEL ---
 
 # df = pd.read_csv("augmented_meranaw_proverb.csv")
-df = pd.read_csv(r"C:/Users/HP/Pictures/meranaw_proverb_search/main/augmented_meranaw_proverb.csv")
+import os
+
+csv_path = os.path.join(os.path.dirname(__file__), "augmented_meranaw_proverb.csv")
+df = pd.read_csv(csv_path)
 
 def normalize_meranaw_word(text):
     if not isinstance(text, str):
