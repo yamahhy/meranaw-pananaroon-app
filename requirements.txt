@@ -66,4 +66,3 @@ torch
 sentence-transformers
 gtts
 scikit-learn
-starlette==0.36.3
