@@ -1,0 +1,2789 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meranaw Pananaroon - Preservation of Meranaw Proverbs</title>
+
+    <!-- External Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,300;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+      href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+    />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#6f1926",
+              accent: "#e5c121",
+            },
+            borderRadius: {
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Custom CSS -->
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      .icon-container {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+      .rounded-button {
+        border-radius: 8px;
+      }
+      .theme-box {
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .theme-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      }
+      .dashboard-only {
+        display: block;
+      }
+      .dashboard-only.hidden {
+        display: none !important;
+      }
+      /* Custom checkbox styling */
+      .custom-checkbox {
+        position: relative;
+        padding-left: 35px;
+        cursor: pointer;
+      }
+
+      .custom-checkbox input {
+        position: absolute;
+        opacity: 0;
+      }
+
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+      }
+      .modal-box {
+        transform: scale(0.95);
+        animation: zoomIn 0.3s forwards;
+        position: fixed;
+        inset: 0; /* top: 0, right: 0, bottom: 0, left: 0 */
+        background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 30;
+        display: none; /* hidden by default */
+      }
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background-color: white;
+        border-radius: 0.5rem; /* rounded corners */
+        max-width: 42rem; /* same as max-w-2xl */
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 1.5rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+      @keyframes zoomIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .custom-checkbox:hover input ~ .checkmark {
+        background-color: #f9fafb;
+      }
+
+      .custom-checkbox input:checked ~ .checkmark {
+        background-color: #6f1926;
+        border-color: #6f1926;
+      }
+
+      .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+      }
+
+      .custom-checkbox input:checked ~ .checkmark:after {
+        display: block;
+      }
+
+      .custom-checkbox .checkmark:after {
+        left: 7px;
+        top: 3px;
+        width: 6px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      /* Animations */
+      .sidebar {
+        transition: transform 0.3s ease;
+        transform: translateX(100%); /* Default closed state */
+      }
+
+      .sidebar.open {
+        transform: translateX(0); /* Open state */
+      }
+
+      .notification {
+        animation: slideIn 0.3s forwards;
+      }
+
+      .modal {
+        animation: fadeIn 0.2s;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(100%);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .principle-card {
+        transition: all 0.3s ease;
+      }
+      .principle-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(139, 38, 53, 0.1);
+      }
+      .scroll-smooth {
+        scroll-behavior: smooth;
+      }
+    </style>
+    <link rel="stylesheet" href="./static/style.css" />
+    <script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-app-compat.js"></script>
+    <!-- Firebase Firestore (compat version) -->
+    <script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore-compat.js"></script>
+  </head>
+
+  <body class="bg-white min-h-screen font-sans">
+    <!-- Main Container -->
+    <div class="relative min-h-screen">
+      <!-- Header -->
+      <header class="bg-white shadow-sm">
+        <div
+          class="container mx-auto px-4 py-3 flex items-center justify-between"
+        >
+          <div class="flex items-center">
+            <button
+              id="openSidebar"
+              class="mr-4 w-10 h-10 flex items-center justify-center text-gray-700 lg:hidden"
+            >
+              <i class="ri-menu-line ri-lg"></i>
+            </button>
+            <h1 class="text-xl font-medium text-primary hidden sm:block">
+              MERANAW PANANAROON
+            </h1>
+          </div>
+          <div class="flex items-center space-x-4">
+            <button
+              id="filterButton"
+              class="w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-full relative"
+            >
+              <i class="ri-filter-3-line"></i>
+            </button>
+            <button
+              id="menuToggle" class="w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-full"
+            >
+              <i class="ri-menu-line"></i>
+            </button>
+            <div
+              id="filterDropdown"
+              class="hidden absolute right-4 top-16 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+            >
+              <div class="p-4">
+                <h3 class="font-semibold text-gray-900 mb-3">Filters</h3>
+                <div class="space-y-4">
+                  <div>
+                    <label class="font-medium text-gray-700 block mb-2"
+                      >Category</label
+                    >
+                    <div class="space-y-2">
+                      <label class="flex items-center">
+                        <input
+                          type="checkbox"
+                          name="category"
+                          value="leadership"
+                          class="form-checkbox text-primary rounded border-gray-300"
+                        />
+                        <span class="ml-2 text-gray-600">Leadership</span>
+                      </label>
+                      <label class="flex items-center">
+                        <input
+                          type="checkbox"
+                          name="category"
+                          value="conflict"
+                          class="form-checkbox text-primary rounded border-gray-300"
+                        />
+                        <span class="ml-2 text-gray-600"
+                          >Conflict Resolution</span
+                        >
+                      </label>
+                      <label class="flex items-center">
+                        <input
+                          type="checkbox"
+                          name="category"
+                          value="death"
+                          class="form-checkbox text-primary rounded border-gray-300"
+                        />
+                        <span class="ml-2 text-gray-600">Death Sermon</span>
+                      </label>
+                    </div>
+                  </div>
+                <div class="mt-4 pt-3 border-t border-gray-200">
+                  <button
+                    id="applyFilters"
+                    class="w-full bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap !rounded-button"
+                  >
+                    Apply Filters
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </header>
+        <!-- Hero Section -->
+        <section id="heroSection" class="bg-white py-4 dashboard-only">
+        <div class="container mx-auto px-4 text-center">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+            MERANAW PANANAROON
+          </h1>
+          <p class="text-gray-600 max-w-2xl mx-auto mb-8">
+            Discover the rich cultural heritage and wisdom of the Meranaw people
+            through their traditional proverbs and ethical teachings.
+          </p>
+        </div>
+        </section>
+      <!-- Main Content -->
+      <main id="searchBar" class="container mx-auto px-6 py-8 dashboard-only">
+        <!-- Search Bar -->
+        <div class="max-w-xl mx-auto mb-16 dashboard-only">
+          <div class="relative">
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Search Meranaw proverbs..."
+              class="w-full h-12 px-5 py-3 pl-12 text-base rounded-xl bg-white text-gray-700 border border-transparent relative"
+              style="
+                background: linear-gradient(white, white) padding-box,
+                  linear-gradient(90deg, #6f1926 0%, #942031 50%, #e5c121 100%)
+                    border-box;
+                border-width: 1px;
+              "
+            />
+            <div
+              class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 flex items-center justify-center"
+            >
+              <i class="ri-search-line text-lg"></i>
+            </div>
+
+            <!-- new -->
+            <button
+              id="searchButton"
+              onclick="handleSearch()"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-primary text-white px-4 py-1.5 rounded-button text-sm font-medium hover:bg-opacity-90 whitespace-nowrap transition-all duration-200"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+        <!-- Search Results View -->
+        <div id="searchResultsView" class="hidden max-w-4xl mx-auto">
+          <div class="mb-6">
+            <button
+              id="backFromSearch"
+              class="flex items-center gap-2 text-gray-600 hover:text-primary"
+            >
+              <span class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-arrow-left-line"></i>
+              </span>
+              <span>Back to Categories</span>
+            </button>
+          </div>
+          <h1 class="text-2xl font-bold text-center mb-8 text-accent">
+            Search Results
+          </h1>
+          <div id="searchResults" class="space-y-4"></div>
+          <div id="noResults" class="hidden text-center py-8">
+            <div class="w-16 h-16 mx-auto mb-4 text-gray-300">
+              <i class="ri-search-line text-5xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-700 mb-2">
+              No results found
+            </h3>
+            <p class="text-gray-500 mb-4">
+              Try different keywords or check your spelling
+            </p>
+            <button id="clearSearch" class="text-primary hover:text-opacity-80">
+              Clear search and start over
+            </button>
+          </div>
+        </div>
+        <!-- Proverb List View (Initially Hidden) -->
+        <div id="proverbListView" class="section hidden max-w-4xl mx-auto">
+          <div class="mb-6">
+            <button
+              id="backToDashboard"
+              class="flex items-center gap-2 text-gray-600 hover:text-primary"
+            >
+              <span class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-arrow-left-line"></i>
+              </span>
+              <span>Back to Categories</span>
+            </button>
+          </div>
+          <h1
+            id="themeTitle"
+            class="text-2xl font-bold text-center mb-8 text-accent"
+          >
+            Community & Society
+          </h1>
+          <div class="space-y-4">
+            <!-- Proverbs will be loaded dynamically here -->
+          </div>
+        </div>
+        <!-- Themed Categories -->
+      </main>
+      <!-- Sidebar -->
+      <div
+        id="sidebar"
+        class="fixed top-0 right-0 w-80 h-full bg-white shadow-lg transform translate-x-full sidebar z-20"
+      >
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-8">
+            <h2 class="text-xl font-bold text-primary">Menu</h2>
+            <button
+              id="closeSidebar"
+              class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full"
+            >
+              <i class="ri-close-line text-xl"></i>
+            </button>
+          </div>
+          <button
+            id="contributeBtn"
+            class="w-full bg-primary text-white py-3 px-4 rounded-button mb-6 flex items-center justify-center gap-2 hover:bg-opacity-90 whitespace-nowrap"
+          >
+            <span class="w-5 h-5 flex items-center justify-center">
+              <i class="ri-add-line"></i>
+            </span>
+            <span>Contribute a Proverb</span>
+          </button>
+          <nav class="space-y-6">
+            <div>
+              <h3
+                class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3"
+              >
+                Navigation
+              </h3>
+              <ul class="space-y-2">
+                <li>
+                  <a
+                    href="#"
+                    id="homeLink"
+                    class="flex items-center gap-3 text-gray-700 hover:text-primary py-2"
+                    onclick="showSection('dashboardView')"
+                  >
+                    <span class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-home-line"></i>
+                    </span>
+                    <span>Home</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    id="ethicsLink"
+                    href="#"
+                    class="flex items-center gap-3 text-gray-700 hover:text-primary py-2"
+                    onclick="showSection('ethicalprinciples')"
+                  >
+                    <span class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-book-2-line"></i>
+                    </span>
+                    <span>Ethical Principles</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    id="aboutLink"
+                    class="flex items-center gap-3 text-gray-700 hover:text-primary py-2"
+                    onclick="showSection('about')"
+                  >
+                    <span class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </span>
+                    <span>About</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    id="sourcesLink"
+                    class="flex items-center gap-3 text-gray-700 hover:text-primary py-2"
+                    onclick="showSection('sourcesection')"
+                  >
+                    <span class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-file-list-line"></i>
+                    </span>
+                    <span>Sources</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    id="engageLink"
+                    class="flex items-center gap-3 text-gray-700 hover:text-primary py-2"
+                    onclick="showSection('engageSection')"
+                  >
+                    <span class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-hand-heart-line"></i>
+                    </span>
+                    <span>Engage with us</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- <div>
+              <h3
+                class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3"
+              >
+                Additional Resources
+              </h3>
+              <ul class="space-y-2">
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center gap-3 text-gray-700 hover:text-primary py-2"
+                  >
+                    <span class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-book-line"></i>
+                    </span>
+                    <span>Meranaw Culture</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center gap-3 text-gray-700 hover:text-primary py-2"
+                  >
+                    <span class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-translate-2"></i>
+                    </span>
+                    <span>Language Resources</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center gap-3 text-gray-700 hover:text-primary py-2"
+                  >
+                    <span class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-contacts-line"></i>
+                    </span>
+                    <span>Contact Us</span>
+                  </a>
+                </li>
+              </ul>
+            </div> -->
+          </nav>
+        </div>
+      </div>
+      <!-- Proverb Detail Modal -->
+      <div
+        id="proverbModal"
+        class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4 py-8 overflow-auto hidden"
+      >
+        <div class="bg-white rounded-lg w-full max-w-2xl mx-auto shadow-lg p-6">
+          <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl font-bold text-primary">Proverb Details</h2>
+              <button
+                id="closeProverbModal"
+                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full"
+              >
+                <i class="ri-close-line text-xl"></i>
+              </button>
+            </div>
+            <div class="mb-2 text-xs text-gray-500">
+              ID: <span id="proverbId">CS001</span>
+            </div>
+            <div class="space-y-4 mb-6">
+              <div>
+                <h3 class="text-sm font-semibold text-gray-500">Proverb:</h3>
+                <p id="proverbText" class="text-lg font-medium text-primary">
+                  Aya ipkhababaya o taw na ipkhababaya niyan ko pagari niyan
+                </p>
+
+                <div>
+                  <h3 class="text-sm font-semibold text-gray-500">
+                    Play Audio:
+                  </h3>
+                  <button
+                    id="playAudioBtn"
+                    onclick="speakProverb()"
+                    class="bg-blue-600 text-white py-1 px-3 rounded hover:bg-blue-700 text-sm mt-2"
+                  >
+                    🔊 Speak Proverb
+                  </button>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-gray-500">
+                  Literal Meaning:
+                </h3>
+                <p id="literalMeaning" class="text-gray-700">
+                  What one wishes for himself, he should wish for his brother.
+                </p>
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-gray-500">
+                  English Translation:
+                </h3>
+                <p id="englishTranslation" class="text-gray-700">
+                  What one wishes for himself, he should wish for his brother.
+                </p>
+              </div>
+            </div>
+            <div class="pt-4 border-t border-gray-100">
+              <button
+                id="interpretBtn"
+                class="bg-accent text-white py-2 px-4 rounded-button hover:bg-opacity-90 whitespace-nowrap"
+              >
+                <span class="flex items-center gap-2">
+                  <span class="w-5 h-5 flex items-center justify-center">
+                    <i
+                      onclick="generateInterpretation()"
+                      class="ri-lightbulb-line"
+                    ></i>
+                  </span>
+                  <span>Generate Interpretation</span>
+                </span>
+              </button>
+              <div
+                id="interpretationContainer"
+                class="mt-4 p-4 bg-gray-50 rounded hidden"
+              >
+                <h3 class="text-sm font-semibold text-gray-500 mb-2">
+                  Interpretation:
+                </h3>
+                <p id="interpretationText" class="text-gray-700">
+                  This proverb emphasizes the importance of empathy and treating
+                  others with the same consideration we desire for ourselves. It
+                  reflects the golden rule found in many cultures and religions,
+                  encouraging people to extend their good wishes and actions to
+                  others, especially those close to them. In Meranaw society,
+                  this proverb reinforces the value of community solidarity and
+                  familial bonds.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Contribute Modal -->
+      <div
+        id="contributionModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30 hidden modal"
+      >
+        <div
+          class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        >
+          <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-xl font-bold text-primary">
+                Contribute a Proverb
+              </h2>
+              <button
+                id="closeContribution"
+                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full"
+              >
+                <i class="ri-close-line text-xl"></i>
+              </button>
+            </div>
+            <form id="contributeForm" class="space-y-4">
+              <div>
+                <label
+                  for="proverb"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Meranaw Proverb:</label
+                >
+                <input
+                  type="text"
+                  id="proverb"
+                  name="proverb"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Enter the original Meranaw proverb"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="literal_meaning"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Literal Meaning:</label
+                >
+                <textarea
+                  id="literal_meaning"
+                  name="literal_meaning"
+                  rows="3"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Enter the literal meaning of the proverb"
+                  required
+                ></textarea>
+              </div>
+              <div>
+                <label
+                  for="english_translation"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >English Translation:</label
+                >
+                <textarea
+                  id="english_translation"
+                  name="english_translation"
+                  rows="3"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Enter the English translation of the proverb"
+                  required
+                ></textarea>
+              </div>
+              <div>
+                <label
+                  for="theme"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Theme:</label
+                >
+                <div class="relative">
+                  <select
+                    id="theme"
+                    name="theme"
+                    class="w-full px-4 py-2 border border-gray-300 rounded appearance-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-8"
+                    required
+                  >
+                    <option value="" disabled selected>Select a theme</option>
+                    <option value="courtship_marriage">
+                      Courtship/Marriage
+                    </option>
+                    <option value="leadership">Leadership</option>
+                    <option value="conflict_resolution">
+                      Conflict Resolution
+                    </option>
+                    <option value="argumentation">Argumentation</option>
+                    <option value="death_sermon">Death Sermon</option>
+                    <option value="enthronement_genealogy">
+                      Enthronement/Genealogy
+                    </option>
+                    <option value="moral_teaching">
+                      Moral Teaching and Self-Reflection
+                    </option>
+                  </select>
+                  <div
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none w-5 h-5 flex items-center justify-center"
+                  >
+                    <i class="ri-arrow-down-s-line text-gray-400"></i>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label
+                  for="source"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Source:</label
+                >
+                <input
+                  type="text"
+                  id="source"
+                  name="source"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Enter the source of the proverb (e.g., book, elder, personal knowledge)"
+                  required
+                />
+              </div>
+              <div class="pt-4">
+                <button
+                  type="submit"
+                  class="w-full bg-primary text-white py-3 px-4 rounded-button hover:bg-opacity-90 whitespace-nowrap"
+                >
+                  Submit Contribution
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- Notification -->
+      <div
+        id="notification"
+        class="hidden fixed bottom-0 left-0 m-6 p-4 bg-white rounded shadow-lg border-l-4 border-green-500 notification z-40"
+      >
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 flex items-center justify-center text-green-500">
+            <i class="ri-check-line"></i>
+          </div>
+          <div>
+            <h3 class="font-medium text-green-800"></h3>
+            <p class="text-sm text-green-700">
+              The cultural experts will review and validate your submission.
+              Your effort helps preserve Meranaw cultural heritage.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- About Section -->
+      <div id="about" class="section hidden">
+        <div class="max-w-4xl mx-auto">
+          <div class="p-4">
+            <h2 class="text-3xl font-bold text-primary mb-8 text-center">
+              About Meranaw Pananaroon
+            </h2>
+
+            <!-- What It Is -->
+            <div class="mb-8">
+              <h3
+                class="text-2xl font-semibold text-gray-800 mb-4 flex items-center"
+              >
+                <i class="ri-information-circle-line text-primary mr-3"></i>
+                What It Is
+              </h3>
+              <p class="text-gray-700 leading-relaxed text-lg">
+                This platform is a digital initiative dedicated to the
+                preservation, digitization, and revitalization of Meranaw
+                Pananaroon (proverbs), utilizing the power of Natural Language
+                Processing (NLP) and modern web technologies. It serves as an
+                evolving archive that bridges cultural heritage and innovation.
+              </p>
+            </div>
+
+            <!-- Why It Was Created -->
+            <div class="mb-8">
+              <h3
+                class="text-2xl font-semibold text-gray-800 mb-4 flex items-center"
+              >
+                <i class="ri-lightbulb-line text-primary mr-3"></i>
+                Why It Was Created
+              </h3>
+              <p class="text-gray-700 leading-relaxed text-lg">
+                Meranaw proverbs carry centuries of wisdom, values, and
+                identity—yet many remain undocumented or inaccessible in today's
+                digital age. Traditional preservation methods often struggle
+                with issues of reach, sustainability, and engagement. This
+                platform was built to address those challenges, offering a
+                sustainable, interactive, and tech-driven solution to ensure
+                that these oral traditions are not only safeguarded but also
+                shared, studied, and celebrated.
+              </p>
+            </div>
+
+            <!-- Who It's For -->
+            <div class="mb-8">
+              <h3
+                class="text-2xl font-semibold text-gray-800 mb-4 flex items-center"
+              >
+                <i class="ri-team-line text-primary mr-3"></i>
+                Who It's For
+              </h3>
+              <div class="bg-gray-50 rounded-lg p-6">
+                <p class="text-gray-700 mb-4 text-lg">
+                  This project is designed for:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="flex items-start">
+                    <i class="ri-microscope-line text-primary mr-3 mt-1"></i>
+                    <span class="text-gray-700"
+                      >Researchers exploring linguistics, culture, or artificial
+                      intelligence</span
+                    >
+                  </div>
+                  <div class="flex items-start">
+                    <i
+                      class="ri-graduation-cap-line text-primary mr-3 mt-1"
+                    ></i>
+                    <span class="text-gray-700"
+                      >Students and educators seeking authentic local
+                      materials</span
+                    >
+                  </div>
+                  <div class="flex items-start">
+                    <i class="ri-community-line text-primary mr-3 mt-1"></i>
+                    <span class="text-gray-700"
+                      >Meranaw communities aiming to reconnect with their
+                      heritage</span
+                    >
+                  </div>
+                  <div class="flex items-start">
+                    <i class="ri-heart-line text-primary mr-3 mt-1"></i>
+                    <span class="text-gray-700"
+                      >Cultural advocates and language enthusiasts interested in
+                      Philippine indigenous knowledge</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mission & Vision -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div class="bg-primary bg-opacity-5 rounded-lg p-6">
+                <h3
+                  class="text-2xl font-semibold text-primary mb-4 flex items-center"
+                >
+                  <i class="ri-target-line mr-3"></i>
+                  Mission
+                </h3>
+                <p class="text-gray-700 leading-relaxed">
+                  To safeguard and amplify the voice of Meranaw heritage by
+                  making traditional proverbs accessible, understandable, and
+                  relevant through cutting-edge digital tools and NLP-driven
+                  features.
+                </p>
+              </div>
+              <div class="bg-yellow-50 rounded-lg p-6">
+                <h3
+                  class="text-2xl font-semibold text-yellow-700 mb-4 flex items-center"
+                >
+                  <i class="ri-eye-line mr-3"></i>
+                  Vision
+                </h3>
+                <p class="text-gray-700 leading-relaxed">
+                  A future where Meranaw Pananaroon are widely known, integrated
+                  into academic discourse, celebrated in cultural spaces, and
+                  preserved as a living tradition that contributes to the global
+                  mosaic of wisdom and identity.
+                </p>
+              </div>
+            </div>
+
+            <!-- Team Section -->
+            <div class="mb-8">
+              <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="ri-team-line text-primary mr-3"></i>
+                Our Team
+              </h3>
+
+              <!-- Developers -->
+              <div class="text-white rounded-lg p-8 mb-6" style="background: linear-gradient(to right, #6f1926, #e5c121);">
+                <h4 class="text-xl font-semibold mb-6 flex items-center">
+                  <i class="ri-code-line mr-3"></i>
+                  Developers
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="text-center">
+                    <div
+                      class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4"
+                    >
+                      <i class="ri-user-line text-3xl"></i>
+                    </div>
+                    <h5 class="text-xl font-semibold">Maha A. Hadje Ebrahim</h5>
+                  </div>
+                  <div class="text-center">
+                    <div
+                      class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4"
+                    >
+                      <i class="ri-user-line text-3xl"></i>
+                    </div>
+                    <h5 class="text-xl font-semibold">Intishar M. Usman</h5>
+                  </div>
+                </div>
+                <p class="text-center mt-6 text-lg leading-relaxed">
+                  Fourth-year Bachelor of Science in Computer Science students at
+                  Mindanao State University – Main Campus, driven by a shared
+                  passion for cultural preservation and technology. As proud
+                  Meranaw youth, they are committed to giving back to their
+                  community by leveraging their skills to preserve and promote the
+                  wisdom of Meranaw traditions through digital innovation.
+                </p>
+              </div>
+
+              <!-- Adviser -->
+              <div class="rounded-lg p-8 mb-6" style="background-color: rgba(111, 25, 38, 0.05);">
+                <h4 class="text-2xl font-semibold mb-6 flex items-center text-primary">
+                  <i class="ri-user-star-line mr-3"></i>
+                  Adviser
+                </h4>
+                <div class="text-center">
+                  <div
+                    class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
+                    style="background-color: rgba(111, 25, 38, 0.2);"
+                  >
+                    <i class="ri-user-line text-3xl text-primary"></i>
+                  </div>
+                  <h5 class="text-xl font-semibold mb-4 text-primary">Prof. Johaira R. Isra</h5>
+                  <p class="text-lg leading-relaxed text-gray-700">
+                    Our project was guided and supervised by Prof. Johaira R. Isra, 
+                    Assistant Dean and faculty member of the College of Information 
+                    and Computing Sciences (CICS), whose expertise and mentorship were 
+                    instrumental throughout the development process.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Cultural Expert -->
+              <div class="bg-yellow-50 rounded-lg p-8">
+                <h4 class="text-2xl font-semibold mb-6 flex items-center" style="color: #b8941a;">
+                  <i class="ri-book-open-line mr-3"></i>
+                  Cultural Expert
+                </h4>
+                <div class="text-center">
+                  <div
+                    class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
+                    style="background-color: rgba(184, 148, 26, 0.2);"
+                  >
+                    <i class="ri-user-line text-3xl" style="color: #b8941a;"></i>
+                  </div>
+                  <h5 class="text-xl font-semibold mb-4" style="color: #b8941a;">Prof. Sofailah Latip-Panggaga</h5>
+                  <p class="text-lg leading-relaxed text-gray-700">
+                    The cultural authenticity and linguistic accuracy of the bilingual corpus were validated 
+                    through the expertise of Prof. Sofailah Latip-Panggaga, a respected Meranaw language and cultural expert. 
+                    She is a faculty member at the Mindanao State University – Integrated Laboratory School (MSU-ILS), MSU-Marawi, 
+                    and provided critical insight into the nuances of Meranaw traditions and language.
+                  </p>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      <!-- Ethical Principle -->
+      <div
+        id="ethicalprinciples"
+        class="section hidden max-w-7xl mx-auto px-2 sm:px-2 lg:px-2 py-4"
+      >
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">
+            Ethical Principles of Pananaroon
+          </h1>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            The ethical principles derived from the analysis of denotative and
+            connotative, and figurative language used in Meranaw pananaroon,
+            reflecting the core values and moral foundations of Meranaw culture.
+          </p>
+        </div>
+
+        <!-- Quick Navigation -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Quick Navigation
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a
+              href="#integrity"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-primary hover:text-white transition-colors"
+            >
+              <i class="ri-shield-check-line text-xl"></i>
+              <span>Integrity on Purpose</span>
+            </a>
+            <a
+              href="#wisdom"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-primary hover:text-white transition-colors"
+            >
+              <i class="ri-lightbulb-line text-xl"></i>
+              <span>Language with Wisdom</span>
+            </a>
+            <a
+              href="#respect"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-primary hover:text-white transition-colors"
+            >
+              <i class="ri-user-star-line text-xl"></i>
+              <span>Respect for Authority</span>
+            </a>
+            <a
+              href="#responsibility"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-primary hover:text-white transition-colors"
+            >
+              <i class="ri-hand-heart-line text-xl"></i>
+              <span>Implementation of Responsibility</span>
+            </a>
+            <a
+              href="#modesty"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-primary hover:text-white transition-colors"
+            >
+              <i class="ri-heart-line text-xl"></i>
+              <span>Modesty in Behavior</span>
+            </a>
+            <a
+              href="#social-etiquette"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-primary hover:text-white transition-colors"
+            >
+              <i class="ri-group-line text-xl"></i>
+              <span>Social Etiquette</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Ethical Principles Content -->
+        <div class="space-y-8">
+          <!-- Principle 1: Integrity on Purpose -->
+          <div
+            id="integrity"
+            class="principle-card bg-white rounded-lg shadow-sm p-8"
+          >
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="w-12 h-12 bg-primary text-white rounded-lg flex items-center justify-center"
+              >
+                <i class="ri-shield-check-line text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900">
+                  Kauntol ko Singanin
+                </h2>
+                <p class="text-primary font-medium">Integrity on Purpose</p>
+              </div>
+            </div>
+            <div class="prose max-w-none text-gray-700">
+              <p class="mb-4">
+                The pananaroon in the occasions of courtship (kapamanganakan),
+                enthronement (kandato) and family origin (kabangensa), conflict
+                resolution (kapamasad sa rido), and self-morality (kapamangtuma)
+                highlight the principles of Integrity on Purpose because each
+                word and meaning demonstrates integrity on the speaker's purpose
+                from the denotative and connotative meanings of existence, as
+                well as the figurative language used.
+              </p>
+              <p class="mb-4">
+                <strong
+                  >Integrity on purpose (Kauntol ko singanin) is honesty while
+                  speaking.</strong
+                >
+                Each pananaroon has its purposes, which are the intention,
+                occasion, situation, and impact on the listener. Some of the
+                words show the reality of human weakness, indicating that he
+                needs to change his behavior, while others show the person's
+                talent, indicating the skill of the person to whom he is
+                speaking.
+              </p>
+              <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                <h4 class="font-semibold text-gray-900 mb-2">Key Aspects:</h4>
+                <ul class="list-disc list-inside space-y-1 text-gray-700">
+                  <li>
+                    Demonstrates family history and pride in enthronement and
+                    family origin occasions
+                  </li>
+                  <li>
+                    Maintains harmonious interpersonal relationships through
+                    verbal eloquence
+                  </li>
+                  <li>
+                    Uses metaphor and metonymy to imply comparison and
+                    connection
+                  </li>
+                  <li>
+                    Emphasizes the importance of how something is said over what
+                    is said
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Principle 2: Language Used with Wisdom -->
+          <div
+            id="wisdom"
+            class="principle-card bg-white rounded-lg shadow-sm p-8"
+          >
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="w-12 h-12 bg-primary text-white rounded-lg flex items-center justify-center"
+              >
+                <i class="ri-lightbulb-line text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900">
+                  Kaungangen ko kataruwa-on
+                </h2>
+                <p class="text-primary font-medium">
+                  Language Used with Wisdom
+                </p>
+              </div>
+            </div>
+            <div class="prose max-w-none text-gray-700">
+              <p class="mb-4">
+                In the principle of language used with wisdom, the speaker
+                should apply wisdom to the language he uses in the pananaroon.
+                When a person expresses a pananaroon, he must analyze the
+                occasion and his intention to express the pananaroon in the best
+                way he can.
+              </p>
+              <div class="bg-blue-50 p-6 rounded-lg mt-4">
+                <h4 class="font-semibold text-gray-900 mb-4">
+                  Five Essential Speech Competencies:
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="bg-white p-4 rounded-lg">
+                    <h5 class="font-medium text-primary mb-2">
+                      1. Understandable Speech
+                    </h5>
+                    <p class="text-sm text-gray-600">
+                      Use appropriate volume and clear articulation to ensure
+                      the message is understood.
+                    </p>
+                  </div>
+                  <div class="bg-white p-4 rounded-lg">
+                    <h5 class="font-medium text-primary mb-2">
+                      2. Friendly & Passionate Tone
+                    </h5>
+                    <p class="text-sm text-gray-600">
+                      Use appropriate vocal keys and show energy and enthusiasm.
+                    </p>
+                  </div>
+                  <div class="bg-white p-4 rounded-lg">
+                    <h5 class="font-medium text-primary mb-2">
+                      3. Balanced Speaking/Listening
+                    </h5>
+                    <p class="text-sm text-gray-600">
+                      Keep messages brief and focus on the listener rather than
+                      yourself.
+                    </p>
+                  </div>
+                  <div class="bg-white p-4 rounded-lg">
+                    <h5 class="font-medium text-primary mb-2">
+                      4. Proper Speech Rate
+                    </h5>
+                    <p class="text-sm text-gray-600">
+                      Maintain 140-160 words per minute for optimal
+                      comprehension.
+                    </p>
+                  </div>
+                  <div class="bg-white p-4 rounded-lg md:col-span-2">
+                    <h5 class="font-medium text-primary mb-2">
+                      5. Eliminate Distractions
+                    </h5>
+                    <p class="text-sm text-gray-600">
+                      Avoid word fillers, excessive body movements, and other
+                      speech distractors.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Principle 3: Respect for Authority -->
+          <div
+            id="respect"
+            class="principle-card bg-white rounded-lg shadow-sm p-8"
+          >
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="w-12 h-12 bg-primary text-white rounded-lg flex items-center justify-center"
+              >
+                <i class="ri-user-star-line text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900">
+                  Kasela-i ko mga Datu/Bae
+                </h2>
+                <p class="text-primary font-medium">Respect for Authority</p>
+              </div>
+            </div>
+            <div class="prose max-w-none text-gray-700">
+              <p class="mb-4">
+                Respect for authority (kasela-i ko mga datu/bae) is the main
+                principle of all Meranaws; that is why they reflect it to the
+                pananaroon. Meranaws believe that one factor of true Meranaw is
+                to respect elders because if not, he/she will be considered as
+                slave's attitude (usek).
+              </p>
+              <div class="bg-green-50 p-4 rounded-lg mt-4">
+                <h4 class="font-semibold text-gray-900 mb-2">
+                  Cultural Significance:
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  The Meranaw family structure, similar to Malaysian and Chinese
+                  families, places great emphasis on respecting parents, elders,
+                  and ancestors. This principle is central to moral codes and is
+                  particularly important in tribal societies.
+                </p>
+                <blockquote
+                  class="border-l-4 border-primary pl-4 italic text-gray-600"
+                >
+                  "Nowhere have parents been more venerated by their children
+                  than among the nations of archaic culture" - Westermarck
+                  (1912)
+                </blockquote>
+              </div>
+            </div>
+          </div>
+
+          <!-- Principle 4: Implementation of Responsibility -->
+          <div
+            id="responsibility"
+            class="principle-card bg-white rounded-lg shadow-sm p-8"
+          >
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="w-12 h-12 bg-primary text-white rounded-lg flex items-center justify-center"
+              >
+                <i class="ri-hand-heart-line text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900">
+                  So kipetumanen ko atastanggungan
+                </h2>
+                <p class="text-primary font-medium">
+                  Implementation of Responsibility
+                </p>
+              </div>
+            </div>
+            <div class="prose max-w-none text-gray-700">
+              <p class="mb-4">
+                Being responsible for the Meranaws is important in their
+                culture. Titles are used in Meranaws, so those in political or
+                traditional positions should carry out their responsibilities
+                without hesitation.
+              </p>
+              <div class="bg-yellow-50 p-4 rounded-lg mt-4">
+                <h4 class="font-semibold text-gray-900 mb-2">
+                  Leadership Collaboration:
+                </h4>
+                <p class="text-gray-700">
+                  Traditional and local political leaders must work together to
+                  achieve or promote peace in communities like Marawi City. The
+                  implementation of responsibility is like coordination with
+                  other leaders, where Sultans, Datus, and other Meranaw
+                  traditional leaders engage in functional inter and
+                  intra-community coordination within the framework of
+                  collaborative governance.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Principle 5: Modesty in Behavior -->
+          <div
+            id="modesty"
+            class="principle-card bg-white rounded-lg shadow-sm p-8"
+          >
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="w-12 h-12 bg-primary text-white rounded-lg flex items-center justify-center"
+              >
+                <i class="ri-heart-line text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900">
+                  Kambilangatawi ko parangay
+                </h2>
+                <p class="text-primary font-medium">Modesty in Behavior</p>
+              </div>
+            </div>
+            <div class="prose max-w-none text-gray-700">
+              <p class="mb-4">
+                Speaking in Meranaw is a process that reveals a person's inner
+                thoughts and movements. Speaking the pananaroon can change the
+                behavior of an individual and improve modesty.
+              </p>
+              <div class="bg-purple-50 p-4 rounded-lg mt-4">
+                <h4 class="font-semibold text-gray-900 mb-2">
+                  Kambilangataw (Modesty):
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  Described as the art of living Meranaw culture, imbued with
+                  Meranaw values and traditions. It embodies all the mores that
+                  describe a Meranaw, particularly the Meranaw woman, reflecting
+                  deep harmony in relationships based on status.
+                </p>
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                  <i class="ri-quote-text text-primary"></i>
+                  <span
+                    >Reflects maratabat (honor and pride), politeness, courtesy,
+                    gentility, tact, and diplomacy</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Etiquette Principles -->
+          <div
+            id="social-etiquette"
+            class="principle-card bg-white rounded-lg shadow-sm p-8"
+          >
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="w-12 h-12 bg-primary text-white rounded-lg flex items-center justify-center"
+              >
+                <i class="ri-group-line text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900">
+                  Social Etiquette Principles
+                </h2>
+                <p class="text-primary font-medium">
+                  Principles of Social Interaction
+                </p>
+              </div>
+            </div>
+            <div class="prose max-w-none text-gray-700">
+              <p class="mb-6">
+                The social etiquette principles of pananaroon are derived from
+                the analysis of denotative and connotative, and figurative
+                language used, showing how Meranaw culture values proper social
+                interaction.
+              </p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Genuine Compliments -->
+                <div
+                  class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-lg"
+                >
+                  <h4
+                    class="font-semibold text-gray-900 mb-3 flex items-center gap-2"
+                  >
+                    <i class="ri-thumb-up-line text-primary"></i>
+                    Give Genuine Compliments
+                  </h4>
+                  <p class="text-sm text-gray-700 mb-2">
+                    <strong>Kapembantuga ko salakaw di salakaw</strong>
+                  </p>
+                  <p class="text-gray-600">
+                    Requires compliments to the listener or audience. Giving is
+                    a fundamental principle of good manners, focusing on
+                    appearance, abilities, and personality traits.
+                  </p>
+                </div>
+
+                <!-- Language Awareness -->
+                <div
+                  class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg"
+                >
+                  <h4
+                    class="font-semibold text-gray-900 mb-3 flex items-center gap-2"
+                  >
+                    <i class="ri-brain-line text-primary"></i>
+                    Language Awareness
+                  </h4>
+                  <p class="text-sm text-gray-700 mb-2">
+                    <strong>Kapananggilay Ko Kataru</strong>
+                  </p>
+                  <p class="text-gray-600">
+                    Use precise words appropriate for the occasion. Includes
+                    asking for excuses (kapanabiya) and careful analysis to
+                    avoid family feuds.
+                  </p>
+                </div>
+
+                <!-- Reveal the Truth -->
+                <div
+                  class="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-lg"
+                >
+                  <h4
+                    class="font-semibold text-gray-900 mb-3 flex items-center gap-2"
+                  >
+                    <i class="ri-eye-line text-primary"></i>
+                    Reveal the Truth
+                  </h4>
+                  <p class="text-sm text-gray-700 mb-2">
+                    <strong>Kipayagen ko benar</strong>
+                  </p>
+                  <p class="text-gray-600">
+                    Lying is not recommended when using pananaroon. The audience
+                    expects to hear the truth, and speakers must learn etiquette
+                    when telling the truth.
+                  </p>
+                </div>
+
+                <!-- Loud Articulation -->
+                <div
+                  class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-lg"
+                >
+                  <h4
+                    class="font-semibold text-gray-900 mb-3 flex items-center gap-2"
+                  >
+                    <i class="ri-volume-up-line text-primary"></i>
+                    Loud Articulation of Voice
+                  </h4>
+                  <p class="text-sm text-gray-700 mb-2">
+                    <strong>Ipemaungangen so Lagam</strong>
+                  </p>
+                  <p class="text-gray-600">
+                    Helps in visualizing the speaker's words. Involves proper
+                    tone, stress, and voice modulation to capture audience
+                    attention.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back to Top Button -->
+        <div class="fixed bottom-8 right-8">
+          <button
+            onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+            class="bg-primary text-white w-12 h-12 rounded-full shadow-lg hover:bg-primary-dark transition-colors flex items-center justify-center"
+          >
+            <i class="ri-arrow-up-line text-xl"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Sources -->
+       <div id="sourcesection" class="section hidden max-w-7xl mx-auto px-4 sm:px-2 lg:px-2 py-4 scroll-offset">
+        <h2 class="text-[#8b2635] text-3xl font-bold mb-5 border-b-4 border-[#d4af37] pb-2 text-center">Sources</h2>
+        <p class="text-gray-700 text-lg mb-10 text-center max-w-4xl mx-auto">
+          The proverbs featured in this system were collected from several validated and culturally significant texts,
+          each contributing to the preservation and understanding of Meranaw wisdom and cultural heritage.
+        </p>
+
+        <!-- Books List (like Principles block) -->
+        <div class="space-y-10">
+          <!-- Book 1 -->
+          <div class="bg-gradient-to-br from-white to-[#f9f7f4] border-2 border-[#e8e0d5] rounded-xl p-6">
+            <div class="mb-4">
+              <h3 class="text-[#8b2635] text-2xl font-bold leading-snug">Pananadem Pananaroon ago Thoba-Thobad o Manga Lokes</h3>
+              <p class="text-[#d4af37] italic">by Prof. Sofailah Latip-Panggaga</p>
+            </div>
+            <p class="text-gray-700 text-sm mb-3">
+              A comprehensive collection of traditional Meranaw proverbs and riddles, meticulously gathered and documented
+              by Prof. Latip-Panggaga. This foundational text serves as one of the most extensive repositories of Meranaw wisdom literature.
+            </p>
+            <span class="inline-block mt-2 bg-[#d4af37] text-white text-xs font-bold px-3 py-1 rounded-full">184 proverbs</span>
+          </div>
+
+          <!-- Book 2 -->
+          <div class="bg-gradient-to-br from-white to-[#f9f7f4] border-2 border-[#e8e0d5] rounded-xl p-6">
+            <div class="mb-4">
+              <h3 class="text-[#8b2635] text-2xl font-bold leading-snug">So Manga Pananaroon Sa Ranaw: Reflections of Meranaw Culture and Worldview</h3>
+              <p class="text-[#d4af37] italic">by Bantog & Sarip-Macarambon</p>
+            </div>
+            <p class="text-gray-700 text-sm">
+              An analytical exploration of Meranaw proverbs that delves deep into their cultural significance and worldview.
+              This scholarly work provides context and interpretation of traditional sayings within the broader framework of Meranaw society.
+            </p>
+          </div>
+
+          <!-- Book 3 -->
+          <div class="bg-gradient-to-br from-white to-[#f9f7f4] border-2 border-[#e8e0d5] rounded-xl p-6">
+            <div class="mb-4">
+              <h3 class="text-[#8b2635] text-2xl font-bold leading-snug">Montiya: Book of Meranaw Poems, Dialogues, and Peace Sayings</h3>
+              <p class="text-[#d4af37] italic">by Dr. Johara D. Alangca-Azis</p>
+            </div>
+            <p class="text-gray-700 text-sm">
+              A rich collection that encompasses various forms of Meranaw literary expression, including poems, dialogues, and peace sayings.
+              This work highlights the artistic and philosophical dimensions of Meranaw oral tradition.
+            </p>
+          </div>
+
+          <!-- Book 4 -->
+          <div class="bg-gradient-to-br from-white to-[#f9f7f4] border-2 border-[#e8e0d5] rounded-xl p-6">
+            <div class="mb-4">
+              <h3 class="text-[#8b2635] text-2xl font-bold leading-snug">Sempad a Maradika a Paninggalan sa Ranao</h3>
+              <p class="text-[#d4af37] italic">by Tingcap G. Pandi and Jamel S. Macarampat</p>
+            </div>
+            <p class="text-gray-700 text-sm">
+              A valuable compilation of noble heritage and traditional teachings from the Ranao region. This collaborative
+              work preserves important cultural knowledge and ancestral wisdom of the Meranaw people.
+            </p>
+          </div>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="bg-[#f0ede8] border-l-4 border-[#d4af37] rounded-r-lg p-5 italic text-[#5a5a5a] mt-10">
+          <strong>Note:</strong> All entries have been standardized, translated, and reviewed with the guidance of a
+          Meranaw language expert to ensure cultural authenticity and linguistic accuracy.
+        </div>
+      </div>
+      <!-- Engage with Us -->
+       <div id="engageSection" class="hidden p-4 max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="bg-primary text-white rounded-lg p-8 mb-8">
+                <div class="flex items-center gap-4 mb-4">
+                    <i class="ri-hand-heart-line text-4xl"></i>
+                    <h1 class="text-3xl font-bold">Engage with Us</h1>
+                </div>
+                <p class="text-lg opacity-90">Join us in preserving and enriching Meranaw cultural heritage</p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="bg-white rounded-lg shadow-lg p-12 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <i class="ri-quill-pen-line text-2xl text-primary"></i>
+                    <h2 class="text-2xl font-bold text-text-brown">Contribute a Proverb</h2>
+                </div>
+                
+                <div class="prose prose-lg max-w-none mb-8">
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        We warmly encourage individuals to take part in the preservation and enrichment of Meranaw 
+                        cultural heritage by contributing traditional <strong>Pananaroon</strong> (proverbs). This initiative is open to 
+                        all—whether you are a native speaker, a scholar, or someone with knowledge of Meranaw 
+                        traditions, anyone may submit.
+                    </p>
+                    
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        Your contribution plays a vital role in safeguarding the wisdom embedded in Meranaw oral 
+                        literature. To ensure accuracy, cultural relevance, and integrity, each submitted proverb 
+                        undergoes a careful review process prior to official inclusion in the collection.
+                    </p>
+                </div>
+
+                <!-- Submission Requirements -->
+                <div class="bg-bg-light rounded-lg p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-text-brown mb-4 flex items-center gap-2">
+                        <i class="ri-file-list-3-line text-primary"></i>
+                        Submission Requirements
+                    </h3>
+                    <p class="text-gray-700 mb-4">
+                        To contribute a proverb, please complete the designated form by providing the following information:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white rounded-lg p-4 border border-primary/20">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="ri-translate-2 text-primary"></i>
+                                <h4 class="font-semibold text-text-brown">Meranaw Proverb</h4>
+                            </div>
+                            <p class="text-sm text-gray-600">The original text of the proverb in Meranaw.</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-primary/20">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="ri-file-text-line text-primary"></i>
+                                <h4 class="font-semibold text-text-brown">Literal Meaning</h4>
+                            </div>
+                            <p class="text-sm text-gray-600">A direct, word-for-word English translation.</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-primary/20">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="ri-global-line text-primary"></i>
+                                <h4 class="font-semibold text-text-brown">English Translation</h4>
+                            </div>
+                            <p class="text-sm text-gray-600">An interpretive or equivalent English version that conveys the intended message.</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-primary/20">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="ri-price-tag-3-line text-primary"></i>
+                                <h4 class="font-semibold text-text-brown">Theme</h4>
+                            </div>
+                            <p class="text-sm text-gray-600">Select the appropriate thematic category (e.g., wisdom, family, respect, perseverance).</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-primary/20 md:col-span-2">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="ri-bookmark-line text-primary"></i>
+                                <h4 class="font-semibold text-text-brown">Source</h4>
+                            </div>
+                            <p class="text-sm text-gray-600">Indicate the origin or reference of the proverb (e.g., oral tradition, community elder, written source).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Process -->
+                <div class="bg-white border border-primary/20 rounded-lg p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-text-brown mb-4 flex items-center gap-2">
+                        <i class="ri-search-eye-line text-primary"></i>
+                        Review and Verification
+                    </h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Upon submission, your entry will be recorded in our database and forwarded to a designated 
+                        cultural expert or review panel. This team will evaluate the authenticity, clarity, and cultural 
+                        appropriateness of the proverb. Once verified and approved, your contribution will be published 
+                        as part of our official Pananaroon collection.
+                    </p>
+                </div>
+
+                <!-- Access Information -->
+                <div class="bg-gradient-to-r from-primary/5 to-primary-light/5 rounded-lg p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-text-brown mb-4 flex items-center gap-2">
+                        <i class="ri-information-line text-primary"></i>
+                        How to Access the Form
+                    </h3>
+                    <p class="text-gray-700 mb-4">
+                        You may access the contribution form by clicking the "Contribute a Proverb" button (➕ icon) 
+                        in the sidebar or the Contribute Now button below.
+                    </p>
+                    
+                    <button id="contributeBtn" class="bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl" onclick="showSection('contributeBtn')"> 
+                        <i class="ri-add-line"></i>
+                        Contribute Now
+                    </button>
+                  
+                </div>
+
+                <!-- Appreciation Note -->
+                <div class="text-center bg-primary/10 rounded-lg p-6">
+                    <i class="ri-heart-3-line text-3xl text-primary mb-4"></i>
+                    <p class="text-lg text-text-brown font-medium">
+                        We deeply appreciate your participation in preserving and promoting Meranaw cultural knowledge.
+                    </p>
+                </div>
+            </div>
+        </div>
+       
+      <!-- Theme Categories -->
+      <section class="dashboard-only bg-gray-50 py-12">
+        <div class="max-w-6xl mx-auto px-4">
+          <!-- Category Title -->
+          <div id="categoryTitle" class="dashboard-only text-center mb-8 section hidden">
+            <h2
+              class="text-2xl font-semibold bg-gradient-to-r from-[#6f1926] via-[#942031] to-[#e5c121] bg-clip-text text-transparent inline-block"
+            >
+              Categories
+            </h2>
+          </div>
+
+          <!-- Dashboard View / Theme Boxes -->
+          <div
+            id="dashboardView"
+            class=" dashboard-only grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            <div
+              class="theme-box leadership-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+              data-theme="leadership"
+            >
+              <div class="icon-container bg-red-100 mb-4">
+                <i class="ri-user-star-line text-red-500 ri-xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2 text-gray-900">
+                Leadership
+              </h3>
+              <p class="text-gray-600">
+                Wisdom about governance and leadership principles
+              </p>
+            </div>
+            <div
+              class="theme-box conflict-resolution-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+              data-theme="conflict_resolution"
+            >
+              <div class="icon-container bg-yellow-100 mb-4">
+                <i class="ri-scales-3-line text-yellow-500 ri-xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2 text-gray-900">
+                Conflict Resolution
+              </h3>
+              <p class="text-gray-600">
+                Traditional approaches to resolving disputes
+              </p>
+            </div>
+            <div
+              class="theme-box argumentation-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+              data-theme="argumentation"
+            >
+              <div class="icon-container bg-purple-100 mb-4">
+                <i class="ri-discuss-line text-purple-500 ri-xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2 text-gray-900">
+                Argumentation
+              </h3>
+              <p class="text-gray-600">The art of discourse and debate</p>
+            </div>
+            <div
+              class="theme-box death-sermon-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+              data-theme="death_sermon"
+            >
+              <div class="icon-container bg-green-100 mb-4">
+                <i class="ri-plant-line text-green-500 ri-xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2 text-gray-900">
+                Death Sermon
+              </h3>
+              <p class="text-gray-600">
+                Reflections on life, death, and remembrance
+              </p>
+            </div>
+            <div
+              class="theme-box enthronement-genealogy-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+              data-theme="enthronement_genealogy"
+            >
+              <div class="icon-container bg-blue-100 mb-4">
+                <i class="ri-ancient-gate-line text-blue-500 ri-xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2 text-gray-900">
+                Enthronement & Genealogy
+              </h3>
+              <p class="text-gray-600">
+                Heritage, lineage, and royal traditions
+              </p>
+            </div>
+            <div
+              class="theme-box courtship-marriage-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+              data-theme="courtship_marriage"
+            >
+              <div class="icon-container bg-pink-100 mb-4">
+                <i class="ri-heart-line text-pink-500 ri-xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2 text-gray-900">
+                Courtship & Marriage
+              </h3>
+              <p class="text-gray-600">Love, relationships, and family bonds</p>
+            </div>
+            <div
+              class="theme-box moral-teaching-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+              data-theme="moral_teaching"
+            >
+              <div
+                class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center mb-4"
+              >
+                <i class="ri-user-heart-line text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Moral Teaching & Self-Reflection
+              </h3>
+              <p class="text-gray-600">Personal growth and ethical guidance</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Categories Label -->
+      <!-- <div id="categoryTitle" class="text-center mt-12 mb-4">
+          <h2
+            class="text-xl font-semibold bg-gradient-to-r from-[#6f1926] via-[#942031] to-[#e5c121] bg-clip-text text-transparent inline-block"
+          >
+            Categories
+          </h2>
+        </div> -->
+      <!-- Theme Categories -->
+      <!-- <div
+          id="dashboardView"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+        >
+          <div
+            class="theme-box leadership-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            data-theme="leadership"
+          >
+            <div class="icon-container bg-red-100 mb-4">
+              <i class="ri-user-star-line text-red-500 ri-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">Leadership</h3>
+            <p class="text-gray-600">
+              Wisdom about governance and leadership principles
+            </p>
+          </div>
+          <div
+            class="theme-box conflict-resolution-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            data-theme="conflict_resolution"
+          >
+            <div class="icon-container bg-yellow-100 mb-4">
+              <i class="ri-scales-3-line text-yellow-500 ri-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">
+              Conflict Resolution
+            </h3>
+            <p class="text-gray-600">
+              Traditional approaches to resolving disputes
+            </p>
+          </div>
+          <div
+            class="theme-box argumentation-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            data-theme="argumentation"
+          >
+            <div class="icon-container bg-purple-100 mb-4">
+              <i class="ri-discuss-line text-purple-500 ri-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">
+              Argumentation
+            </h3>
+            <p class="text-gray-600">The art of discourse and debate</p>
+          </div>
+          <div
+            class="theme-box death-sermon-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            data-theme="death_sermon"
+          >
+            <div class="icon-container bg-green-100 mb-4">
+              <i class="ri-plant-line text-green-500 ri-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">
+              Death Sermon
+            </h3>
+            <p class="text-gray-600">
+              Reflections on life, death, and remembrance
+            </p>
+          </div>
+          <div
+            class="theme-box enthronement-genealogy-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            data-theme="enthronement_genealogy"
+          >
+            <div class="icon-container bg-blue-100 mb-4">
+              <i class="ri-ancient-gate-line text-blue-500 ri-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">
+              Enthronement & Genealogy
+            </h3>
+            <p class="text-gray-600">Heritage, lineage, and royal traditions</p>
+          </div>
+          <div
+            class="theme-box courtship-marriage-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            data-theme="courtship_marriage"
+          >
+            <div class="icon-container bg-pink-100 mb-4">
+              <i class="ri-heart-line text-pink-500 ri-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">
+              Courtship & Marriage
+            </h3>
+            <p class="text-gray-600">Love, relationships, and family bonds</p>
+          </div>
+          <div
+            class="theme-box moral-teaching-box bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            data-theme="moral_teaching"
+          >
+            <div
+              class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center mb-4"
+            >
+              <i class="ri-user-heart-line text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              Moral Teaching & Self-Reflection
+            </h3>
+            <p class="text-gray-600">Personal growth and ethical guidance</p>
+          </div>
+        </div> -->
+      
+      <!-- Featured Proverbs -->
+      <section id="featuredProverbs" class="dashboard-only py-12 bg-white">
+        <div class="container mx-auto px-4">
+          <h2 class="text-2xl font-semibold mb-2 text-center text-gray-900">
+            Featured Proverbs
+          </h2>
+          <p class="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
+            Explore these timeless words of wisdom that have guided the Meranaw
+            people for generations
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              class="proverb-card bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            >
+              <div class="flex items-center justify-between mb-4">
+                <span
+                  class="text-xs font-medium px-3 py-1 bg-red-100 text-red-600 rounded-full"
+                  >Leadership</span
+                >
+              </div>
+              <h3 class="text-lg font-semibold mb-2 text-gray-900">
+                "Na tomo den so kidalong a di so kipamalata."
+              </h3>
+              <p class="text-gray-600 mb-4">
+                Better to die than to lose one’s honor.
+              </p>
+              <div
+                class="flex items-center justify-between text-sm text-gray-500"
+              >
+                <span
+                  >Source: So Manga Pananaroon Sa Ranaw: Reflections of Meranaw
+                  Culture and Worldview</span
+                >
+              </div>
+            </div>
+            <div
+              class="proverb-card bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            >
+              <div class="flex items-center justify-between mb-4">
+                <span
+                  class="text-xs font-medium px-3 py-1 bg-yellow-100 text-yellow-600 rounded-full"
+                  >Conflict Resolution</span
+                >
+              </div>
+              <h3 class="text-lg font-semibold mb-2 text-gray-900">
+                "Aya kaka sa lalag na so ago katiger."
+              </h3>
+              <p class="text-gray-600 mb-4">
+                It is wiser to be patient and self controlled.
+              </p>
+              <div
+                class="flex items-center justify-between text-sm text-gray-500"
+              >
+                <span
+                  >Source: "Montiya Book of Meranaw Poems, Dialogues and Peace
+                  Saying"</span
+                >
+              </div>
+            </div>
+            <div
+              class="proverb-card bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+            >
+              <div class="flex items-center justify-between mb-4">
+                <span
+                  class="text-xs font-medium px-3 py-1 bg-green-100 text-green-600 rounded-full"
+                  >Death Sermon</span
+                >
+              </div>
+              <h3 class="text-lg font-semibold mb-2 text-gray-900">
+                "An a manik o an a manog."
+              </h3>
+              <p class="text-gray-600 mb-4">
+                You will receive exactly what you offer
+              </p>
+              <div
+                class="flex items-center justify-between text-sm text-gray-500"
+              >
+                <span
+                  >Source: "Pananadem Pananaroon ago Thoba-Thobad o Manga
+                  Lokes"</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- <div class="text-center mt-8">
+            <button
+              class="bg-white border border-primary text-primary px-6 py-2 rounded-button hover:bg-primary hover:text-white transition-colors whitespace-nowrap !rounded-button"
+            >
+              View All Proverbs
+            </button>
+          </div> -->
+        </div>
+      </section>
+      <!-- Ethical Principles Section -->
+      <section id="ethicalSummarySection" class="dashboard-only cultural-context-bg">
+        <div class="container mx-auto px-4 relative z-10">
+          <div
+            class="bg-white bg-opacity-95 rounded-lg shadow-md p-8 max-w-3xl mx-auto"
+          >
+            <h2 class="text-2xl font-semibold mb-4 text-gray-900">
+              The Ethical Principles of Pananaroon
+            </h2>
+            <p class="text-gray-600 mb-6">
+              Through the analysis of denotative, connotative, and figurative
+              language, the Meranaw pananaroon reveals profound ethical
+              principles that guide the community's moral compass and social
+              conduct.
+            </p>
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6"
+            >
+              <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <div
+                  class="w-12 h-12 mx-auto mb-3 flex items-center justify-center bg-primary bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-shield-star-line text-primary ri-xl"></i>
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2">
+                  Kauntol ko singanin
+                </h3>
+                <p class="text-sm text-gray-600">Integrity on Purpose</p>
+              </div>
+              <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <div
+                  class="w-12 h-12 mx-auto mb-3 flex items-center justify-center bg-primary bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-speak-line text-primary ri-xl"></i>
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2">
+                  Kaungangen ko kataruwa-on
+                </h3>
+                <p class="text-sm text-gray-600">Language Used with Wisdom</p>
+              </div>
+              <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <div
+                  class="w-12 h-12 mx-auto mb-3 flex items-center justify-center bg-primary bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-user-star-line text-primary ri-xl"></i>
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2">
+                  Kasela-i ko mga Datu/Bae
+                </h3>
+                <p class="text-sm text-gray-600">Respect for Authority</p>
+              </div>
+              <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <div
+                  class="w-12 h-12 mx-auto mb-3 flex items-center justify-center bg-primary bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-task-line text-primary ri-xl"></i>
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2">
+                  So kipetumanen ko atastanggungan
+                </h3>
+                <p class="text-sm text-gray-600">
+                  The Implementation of Responsibility
+                </p>
+              </div>
+              <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <div
+                  class="w-12 h-12 mx-auto mb-3 flex items-center justify-center bg-primary bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-scales-3-line text-primary ri-xl"></i>
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2">
+                  Kambilangatawi ko parangay
+                </h3>
+                <p class="text-sm text-gray-600">Modesty in Behavior</p>
+              </div>
+            </div>
+            <p class="text-gray-600 mb-6">
+              These ethical principles form the cornerstone of Meranaw wisdom,
+              passed down through generations in the form of pananaroon. They
+              continue to guide moral conduct, social relationships, and
+              cultural preservation within the community.
+            </p>
+            <div class="flex justify-center">
+              <button
+                class="bg-primary text-white px-6 py-2 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap !rounded-button" onclick="showSection('ethicalprinciples')"
+              >
+                See Full Ethical Principles
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Community Contributions Section -->
+      <section id="communityContribution" class="dashboard-only py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+          <h2 class="text-2xl font-semibold mb-2 text-center text-gray-900">
+            Community Contributions
+          </h2>
+          <p class="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
+            Join our growing community of cultural enthusiasts and scholars in
+            preserving Meranaw wisdom
+          </p>
+          <div class="grid grid-cols-1 max-w-4xl mx-auto">
+            <div class="bg-white rounded-lg p-6">
+              <h3 class="text-xl font-semibold mb-4 text-gray-900" onclick="showSection('contributeForm')">
+                Submit a Proverb
+              </h3>
+              <p class="text-gray-600 mb-6">
+                Help us expand our collection by sharing Meranaw proverbs you've
+                learned from family or community elders.
+              </p>
+              <button
+                class="bg-primary text-white px-5 py-2 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap !rounded-button" 
+                onclick="showSection('engageSection')"
+              >
+                Learn more               
+            </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer id="footerSection" class="dashboard-only bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-2">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Brand Section -->
+            <div>
+              <h3 class="text-xl font-['Pacifico'] mb-4">Meranaw Pananaroon</h3>
+              <p class="text-gray-400 text-sm">
+                Preserving and sharing the cultural wisdom of the Meranaw people
+                through their traditional proverbs and teachings.
+              </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+              <ul class="space-y-2 text-gray-400">
+                <li>
+                  <a href="#" class="hover:text-white transition-colors" onclick="showSection('dashboard')"
+                    >Home</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors" onclick="showSection('about')"
+                    >About Us</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors" onclick="showSection('ethicalprinciples')"
+                    >Ethical Principles</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors" onclick="showSection('sourcesection')"
+                    >Sources</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors" onclick="showSection('engageSection')"
+                    >Engage with Us</a
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <!-- Resources -->
+            <!-- <div>
+              <h4 class="text-lg font-semibold mb-4">Resources</h4>
+              <ul class="space-y-2 text-gray-400">
+                <li>
+                  <a href="#" class="hover:text-white transition-colors"
+                    >Research Papers</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors"
+                    >Cultural Events</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors"
+                    >Educational Materials</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors"
+                    >Media Gallery</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors"
+                    >Scholarly Articles</a
+                  >
+                </li>
+              </ul>
+            </div> -->
+
+            <!-- Contact Information -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+              <ul class="space-y-2 text-gray-400">
+                <li class="flex items-center">
+                  <i class="ri-mail-line mr-2"></i>
+                  <span>info@meranawpananaroon.org</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-phone-line mr-2"></i>
+                  <span>+63 917 123 4567</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-map-pin-line mr-2"></i>
+                  <span>Marawi City, Lanao del Sur, Philippines</span>
+                </li>
+              </ul>
+
+              <!-- Social Media Links -->
+              <div class="flex space-x-4 mt-4">
+                <a
+                  href="#"
+                  class="w-8 h-8 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition-colors"
+                >
+                  <i class="ri-facebook-fill"></i>
+                </a>
+                <a
+                  href="#"
+                  class="w-8 h-8 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition-colors"
+                >
+                  <i class="ri-twitter-fill"></i>
+                </a>
+                <a
+                  href="#"
+                  class="w-8 h-8 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition-colors"
+                >
+                  <i class="ri-instagram-fill"></i>
+                </a>
+                <a
+                  href="#"
+                  class="w-8 h-8 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition-colors"
+                >
+                  <i class="ri-youtube-fill"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Copyright Section -->
+          <div
+            class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm"
+          >
+            <p>&copy; 2025 Meranaw Pananaroon Archive. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const searchInput = document.getElementById("searchInput");
+        const searchButton = document.getElementById("searchButton");
+        const searchResultsView = document.getElementById("searchResultsView");
+        const searchResults = document.getElementById("searchResults");
+        const noResults = document.getElementById("noResults");
+        const backFromSearch = document.getElementById("backFromSearch");
+        const clearSearch = document.getElementById("clearSearch");
+        const proverbModal = document.getElementById("proverbModal");
+        const proverbId = document.getElementById("proverbId");
+        const menuToggle = document.getElementById("menuToggle");
+        const sidebar = document.getElementById("sidebar");
+        const closeSidebar = document.getElementById("closeSidebar");
+        const filterBtn = document.getElementById("filterBtn");
+        const filterDropdown = document.getElementById("filterDropdown");
+        const applyFiltersBtn = document.getElementById("applyFiltersBtn");
+        const themeBoxes = document.querySelectorAll(".theme-box");
+        const dashboardView = document.getElementById("dashboardView");
+        const proverbListView = document.getElementById("proverbListView");
+        const backToDashboard = document.getElementById("backToDashboard");
+        const themeTitle = document.getElementById("themeTitle");
+        const proverbListContainer =
+          proverbListView.querySelector(".space-y-4");
+        const contributeBtn = document.getElementById("contributeBtn");
+        const contributionModal = document.getElementById("contributionModal");
+        const closeContribution = document.getElementById("closeContribution");
+        const contributionForm = document.getElementById("contributionForm");
+        const closeContributeModal = document.getElementById(
+          "closeContributeModal"
+        );
+        const submitContribution = document.getElementById("submit");
+        const notificationArea = document.getElementById("notificationArea");
+        const notificationMessage = document.getElementById(
+          "notificationMessage"
+        );
+        const closeNotification = document.getElementById("closeNotification");
+
+        const closeProverbModal = document.getElementById("closeProverbModal");
+        if (closeProverbModal) {
+          closeProverbModal.addEventListener("click", () => {
+            proverbModal.classList.add("hidden");
+            interpretationContainer.classList.add("hidden");
+          });
+        }
+
+        let allProverbs = [];
+        let filteredProverbs = [];
+        let activeFilters = new Set([
+          "courtship_marriage",
+          "leadership",
+          "conflict_resolution",
+          "argumentation",
+          "death_sermon",
+          "enthronement_genealogy",
+          "moral_teaching",
+        ]);
+
+        // const highlightText = (text, query) => {
+        //   const regex = new RegExp(`(${query})`, "gi");
+        //   return text.replace(
+        //     regex,
+        //     '<mark class="bg-accent/20 rounded px-0.5">$1</mark>'
+        //   );
+        // };
+        // Function to show a notification
+        function showNotification(message) {
+          notificationMessage.textContent = message;
+          notificationArea.classList.remove("translate-y-full");
+          setTimeout(() => {
+            notificationArea.classList.add("translate-y-full");
+          }, 3000); // Hide after 3 seconds
+        }
+
+        // Event listeners for sidebar
+        menuToggle.addEventListener("click", function () {
+          sidebar.classList.toggle("translate-x-full");
+          sidebar.classList.toggle("translate-x-0");
+        });
+
+        if (closeSidebar) {
+          closeSidebar.addEventListener("click", function () {
+            sidebar.classList.add("translate-x-full");
+            sidebar.classList.remove("translate-x-0");
+          });
+        }
+
+        // closeSidebar.addEventListener("click", function () {
+        //   sidebar.classList.add("translate-x-full");
+        //   sidebar.classList.remove("translate-x-0");
+        // });
+
+        // Event listeners for filter dropdown
+        filterBtn.addEventListener("click", () => {
+          filterDropdown.classList.toggle("hidden");
+        });
+
+        applyFiltersBtn.addEventListener("click", () => {
+          const checkedFilters = Array.from(
+            filterDropdown.querySelectorAll('input[type="checkbox"]:checked')
+          ).map((checkbox) => checkbox.value);
+          activeFilters = new Set(checkedFilters);
+          filterDropdown.classList.add("hidden");
+          filterProverbs();
+          if (proverbListView.classList.contains("hidden")) {
+            displayDashboard();
+          } else {
+            displayProverbs(filteredProverbs, themeTitle.textContent);
+          }
+        });
+
+        // Event listeners for theme navigation
+        dashboardView.querySelectorAll(".theme-box").forEach((box) => {
+          box.addEventListener("click", function () {
+            const theme = this.dataset.theme;
+            const themeText = this.querySelector("h2").textContent;
+            filterProverbs(theme);
+            themeTitle.textContent = themeText;
+            dashboardView.classList.add("hidden");
+            proverbListView.classList.remove("hidden");
+          });
+        });
+
+        backToDashboard.addEventListener("click", () => {
+          dashboardView.classList.remove("hidden");
+          proverbListView.classList.add("hidden");
+        });
+
+        function displaySearch(results, searchTerm) {
+          searchResultsDiv.innerHTML = "";
+          showProverbList(`Search Results for "${searchTerm}"`);
+
+          if (results.length === 0) {
+            searchResultsDiv.innerHTML = "<p>No proverbs found.</p>";
+            return;
+          }
+
+          const gridContainer = document.createElement("div");
+          gridContainer.classList.add(
+            "grid",
+            "grid-cols-1",
+            "md:grid-cols-2",
+            "lg:grid-cols-3",
+            "gap-4"
+          );
+
+          results.forEach((proverb) => {
+            const proverbBox = document.createElement("div");
+            proverbBox.classList.add(
+              "bg-white",
+              "rounded-lg",
+              "shadow-md",
+              "p-6",
+              "cursor-pointer",
+              "hover:shadow-lg",
+              "transition-shadow"
+            );
+            proverbBox.innerHTML = `
+                                <h3 class="text-lg font-semibold text-primary mb-2">${
+                                  proverb.meranaw
+                                }</h3>
+                                <p class="text-gray-700 mb-1"><span class="font-semibold">Translation:</span> ${
+                                  proverb.english
+                                }</p>
+                                <p class="text-sm text-gray-500"><span class="font-semibold">Theme:</span> ${proverb.theme.replace(
+                                  /_/g,
+                                  " "
+                                )}</p>
+                            `;
+            proverbBox.addEventListener("click", () => {
+              const themeId = proverb.theme.toLowerCase().replace(/ /g, "-");
+              const targetThemeBox = document.querySelector(`.${themeId}-box`);
+
+              if (targetThemeBox) {
+                targetThemeBox.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              } else {
+                console.log(`Theme box for "${proverb.theme}" not found.`);
+              }
+            });
+            gridContainer.appendChild(proverbBox);
+          });
+
+          searchResultsDiv.appendChild(gridContainer);
+        }
+        themeBoxes.forEach((box) => {
+          box.addEventListener("click", function () {
+            const theme = this.querySelector("h2")
+              .textContent.toLowerCase()
+              .replace(/ /g, "_");
+            const filtered = allProverbs.filter(
+              (p) => p.theme.toLowerCase() === theme
+            );
+            displayProverbs(filtered, this.querySelector("h2").textContent);
+          });
+        });
+
+        // Function to filter proverbs based on active filters and optionally a theme
+        function filterProverbs(theme = null) {
+          filteredProverbs = allProverbs.filter((proverb) => {
+            const matchesTheme = !theme || proverb.theme === theme;
+            return matchesTheme && activeFilters.has(proverb.theme);
+          });
+        }
+
+        // Function to display proverbs in the list view
+        function displayProverbs(proverbs, title) {
+          themeTitle.textContent = title;
+          proverbListContainer.innerHTML = "";
+          if (proverbs.length === 0) {
+            proverbListContainer.innerHTML =
+              '<p class="text-gray-500 text-center">No proverbs found.</p>';
+          } else {
+            proverbs.forEach((proverb) => {
+              const proverbDiv = document.createElement("div");
+              proverbDiv.classList.add(
+                "bg-white",
+                "rounded-lg",
+                "shadow-md",
+                "p-6"
+              );
+              proverbDiv.innerHTML = `
+                                        <h3 class="text-lg font-semibold text-primary mb-2">${
+                                          proverb.meranaw
+                                        }</h3>
+                                        <p class="text-gray-700 mb-1"><strong>Translation:</strong> ${
+                                          proverb.english
+                                        }</p>
+                                        <p class="text-sm text-gray-500"><strong>Theme:</strong> ${proverb.theme.replace(
+                                          /_/g,
+                                          " "
+                                        )}</p>
+                                    `;
+              proverbListContainer.appendChild(proverbDiv);
+            });
+          }
+        }
+        function displayProverbs(proverbs, currentThemeTitle) {
+          const proverbListContainer = document.querySelector(
+            "#proverbListView .space-y-4"
+          );
+          const themeTitle = document.getElementById("themeTitle");
+          const categoryTitle = document.getElementById("categoryTitle");
+
+          themeTitle.textContent = title;
+          proverbListContainer.innerHTML = "";
+
+          if (categoryTitle) {
+            categoryTitle.classList.add("hidden");
+          }
+          if (proverbs.length === 0) {
+            proverbListContainer.innerHTML =
+              '<p class="text-gray-500 text-center">No proverbs found.</p>';
+            return;
+          }
+          function showProverbDetails(proverbId) {
+            console.log("Clicked proverb ID:", proverbId); // Add this for debugging
+            const proverb = allProverbs.find((p) => p.id === proverbId);
+            if (!proverb) {
+              console.warn("Proverb not found for ID:", proverbId);
+              return;
+            }
+
+            document.getElementById("proverbId").textContent = proverb.id;
+            document.getElementById("proverbText").textContent =
+              proverb.meranaw;
+            document.getElementById("literalMeaning").textContent =
+              proverb.literal_meaning;
+            document.getElementById("englishTranslation").textContent =
+              proverb.english_translation;
+
+            document
+              .getElementById("interpretationContainer")
+              .classList.add("hidden");
+            document.getElementById("interpretationText").textContent = "";
+
+            if (modal) {
+              modal.classList.remove("hidden");
+              modal.style.display = "block"; // Ensure it's visible
+            }
+          }
+
+          proverbs.forEach((proverb) => {
+            const div = document.createElement("div");
+            div.className = "bg-white rounded-lg shadow-md p-6 cursor-pointer";
+            div.innerHTML = `
+                      <h3 class="text-lg font-semibold text-primary mb-2">${proverb.meranaw}</h3>
+                      <p class="text-gray-700 italic">${proverb.literal_meaning}</p>
+                    `;
+            div.addEventListener("click", () => {
+              showProverbDetails(proverb.id);
+            });
+            proverbListContainer.appendChild(div);
+          });
+        }
+
+        function showSection(sectionId) {
+          const sections = {
+            about: document.getElementById("about"),
+            dashboard: document.getElementById("dashboardView"),
+            categoryTitle: document.getElementById("categoryTitle"),
+            searchBar: document.getElementById("searchBar"),
+            sidebar: document.getElementById("sidebar"),
+            ethicalprinciples: document.getElementById("ethicalprinciples"),
+            sourcesection: document.getElementById("sourcesection"),
+            proverbListView: document.getElementById("proverbListView"),
+            hero: document.getElementById("heroSection"),
+            featured: document.getElementById("featuredProverbs"),
+            ethicalSummary: document.getElementById("ethicalSummarySection"),
+            footer: document.getElementById("footerSection"),
+            community: document.getElementById("communityContribution"),
+          };
+
+          // 🔁 Always hide ALL sections first
+          Object.values(sections).forEach((el) => el?.classList.add("hidden"));
+
+          // ✅ Show dashboard-related sections
+          if (sectionId === "dashboard") {
+            sections.dashboard?.classList.remove("hidden");
+            sections.categoryTitle?.classList.remove("hidden");
+            sections.searchBar?.classList.remove("hidden");
+            sections.hero?.classList.remove("hidden");
+            sections.featured?.classList.remove("hidden");
+            sections.ethicalSummary?.classList.remove("hidden");
+            sections.footer?.classList.remove("hidden");
+            sections.community?.classList.remove("hidden");
+          }
+
+          // ✅ Show other standalone sections
+          if (sectionId === "about") {
+            sections.about?.classList.remove("hidden");
+          } else if (sectionId === "ethicalprinciples") {
+            sections.ethicalprinciples?.classList.remove("hidden");
+          } else if (sectionId === "sourcesection") {
+            sections.sourcesection?.classList.remove("hidden");
+          } else if (sectionId === "proverbListView") {
+            sections.proverbListView?.classList.remove("hidden");
+            sections.searchBar?.classList.remove("hidden"); // optional if you want it to stay
+          }
+
+          // 📱 Close the sidebar (mobile)
+          sections.sidebar?.classList.add("translate-x-full");
+
+          // 🔄 Update nav styles
+          document.querySelectorAll(".nav-link").forEach((link) => {
+            link.classList.remove("text-primary", "font-medium");
+            link.classList.add("text-gray-700");
+          });
+
+          const activeLinkIdMap = {
+            about: "aboutLink",
+            dashboard: "homeLink",
+            ethicalprinciples: "ethicsLink",
+            sourcesection: "sourcesLink",
+          };
+
+          const activeLinkId = activeLinkIdMap[sectionId];
+          const activeLink = document.getElementById(activeLinkId);
+          if (activeLink) {
+            activeLink.classList.remove("text-gray-700");
+            activeLink.classList.add("text-primary", "font-medium");
+          }
+        }
+        // Function to display the dashboard view
+        function displayDashboard() {
+          dashboardView.classList.remove("hidden");
+          proverbListView.classList.add("hidden");
+          themeTitle.textContent = "Meranaw Proverbs"; // Reset title
+        }
+        // Contribution modal functionality
+        contributeBtn.addEventListener("click", function () {
+          contributionModal.classList.remove("hidden");
+          sidebar.classList.add("translate-x-full");
+          sidebar.classList.remove("translate-x-0");
+        });
+
+        if (closeContribution) {
+          closeContribution.addEventListener("click", () => {
+            contributionModal.classList.add("hidden");
+            contributionForm.reset();
+          });
+        }
+
+        if (contributionForm) {
+          contributionForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const proverbText = document
+              .getElementById("proverbText")
+              .value.trim();
+            const proverbTranslation = document
+              .getElementById("proverbTranslation")
+              .value.trim();
+            const proverbTheme = document.getElementById("proverbTheme").value;
+
+            if (proverbText && proverbTranslation && proverbTheme) {
+              window.firebaseService
+                .addProverb({
+                  meranaw: proverbText,
+                  english: proverbTranslation,
+                  theme: proverbTheme,
+                })
+                .then(() => {
+                  showNotification("Proverb submitted for review!");
+                  contributionModal.classList.add("hidden");
+                  contributionForm.reset();
+                  // Optionally refresh the proverb list after submission
+                  loadInitialProverbs();
+                })
+                .catch((error) => {
+                  console.error("Error adding proverb:", error);
+                  showNotification("Thank you for your contribution");
+                });
+            } else {
+              showNotification("Please fill in all the fields.");
+            }
+
+            const notification = document.getElementById("notification");
+            notification.classList.remove("hidden");
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+              notification.classList.add("hidden");
+            }, 5000);
+          });
+        }
+
+        if (closeNotification && notificationArea) {
+          closeNotification.addEventListener("click", () => {
+            notificationArea.classList.add("translate-y-full");
+          });
+        }
+
+        const categoryTitle = document.getElementById("categoryTitle");
+
+        // Hide on search result display
+        const observer = new MutationObserver(() => {
+          if (searchResults && searchResults.innerHTML.trim() !== "") {
+            categoryTitle.style.display = "none";
+          } else {
+            categoryTitle.style.display = "";
+          }
+        });
+
+        if (searchResults) {
+          observer.observe(searchResults, { childList: true, subtree: true });
+        }
+
+        // Hide on theme box click
+        function hideCategoryTitle() {
+          if (categoryTitle) {
+            categoryTitle.style.display = "none";
+          }
+        }
+
+        // Hide when a theme box is clicked
+        themeBoxes.forEach((box) => {
+          box.addEventListener("click", () => {
+            hideCategoryTitle();
+          });
+        });
+
+        const highlightText = (text, query) => {
+          const regex = new RegExp(`(${query})`, "gi");
+          return text.replace(
+            regex,
+            '<mark class="bg-accent/20 rounded px-0.5">$1</mark>'
+          );
+        };
+
+        const performSearch = async () => {
+          const query = searchInput.value.trim();
+          if (!query) return;
+
+          dashboardView.classList.add("hidden");
+          searchResultsView.classList.remove("hidden");
+
+          try {
+            const response = await fetch("http://localhost:8000/search", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ query }),
+            });
+
+            if (!response.ok) throw new Error("Search request failed.");
+
+            const data = await response.json();
+
+            if (data.length > 0) {
+              searchResults.innerHTML = data
+                .map(
+                  (proverb) => `
+                    <div class="proverb-item p-4 border border-gray-200 rounded cursor-pointer" data-id="${
+                      proverb.meranaw_proverb
+                    }">
+                      <div class="flex justify-between">
+                        <h3 class="text-lg font-medium text-primary">${highlightText(
+                          proverb.meranaw_proverb,
+                          query
+                        )}</h3>
+                        <span class="text-xs text-gray-500">${
+                          proverb.search_type
+                        }</span>
+                      </div>
+                      <p class="text-gray-600 italic">${highlightText(
+                        proverb.augmented_interpretation,
+                        query
+                      )}</p>
+                    </div>
+                  `
+                )
+                .join("");
+
+              // Attach modal logic
+              searchResults
+                .querySelectorAll(".proverb-item")
+                .forEach((item) => {
+                  item.addEventListener("click", function () {
+                    const id = this.getAttribute("data-id");
+                    proverbId.textContent = id;
+                    proverbModal.classList.remove("hidden");
+                  });
+                });
+              searchResults.classList.remove("hidden");
+              noResults.classList.add("hidden");
+            } else {
+              searchResults.classList.add("hidden");
+              noResults.classList.remove("hidden");
+            }
+          } catch (error) {
+            console.error("Error fetching search results:", error);
+            searchResults.innerHTML =
+              '<p class="text-red-500">Something went wrong. Please try again.</p>';
+          }
+        };
+
+        searchButton.addEventListener("click", performSearch);
+        searchInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") performSearch();
+        });
+
+        backFromSearch.addEventListener("click", function () {
+          searchResultsView.classList.add("hidden");
+          dashboardView.classList.remove("hidden");
+          searchInput.value = "";
+        });
+
+        clearSearch.addEventListener("click", function () {
+          searchInput.value = "";
+          searchResultsView.classList.add("hidden");
+          dashboardView.classList.remove("hidden");
+        });
+      });
+    </script> -->
+    <!-- Keep the main script import -->
+    <script src="firebaseInit.js"></script>
+    <script src="firebaseService.js"></script>
+    <script src="./static/script.js" defer></script>
+  </body>
+</html>
