@@ -1,10 +1,5 @@
 const API_BASE = "https://meranaw-pananaroon-app.onrender.com";
 
-fetch(`${API_BASE}/api/search?query=life`)
-  .then(res => res.json())
-  .then(data => console.log(data));
-
-
 // ============================================
 // GLOBAL VARIABLES AND DOM ELEMENTS
 // ============================================
@@ -17,7 +12,9 @@ let activeFilters = new Set();
 // DOM elements
 const sidebar = document.getElementById("sidebar");
 const proverbModal = document.getElementById("proverbModal");
-const interpretationContainer = document.getElementById("interpretationContainer");
+const interpretationContainer = document.getElementById(
+  "interpretationContainer"
+);
 const contributionModal = document.getElementById("contributionModal");
 const contributionForm = document.getElementById("contributeForm");
 const notification = document.getElementById("notification");
@@ -95,7 +92,7 @@ const themes = {
 // INITIALIZATION
 // ============================================
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   initApp();
 });
 
@@ -128,8 +125,8 @@ async function initApp() {
 
     window.firebaseService.listenForProverbChanges((updatedProverbs) => {
       allProverbs = updatedProverbs;
-      displayDashboard();  // this populates the dashboardView
-      showDashboard();     // this makes the dashboard visible!
+      displayDashboard(); // this populates the dashboardView
+      showDashboard(); // this makes the dashboard visible!
       console.log("Proverbs updated in real-time!");
     });
 
@@ -142,7 +139,6 @@ async function initApp() {
 
     // ⬇️ Add this line here to force visibility on page load
     showDashboard();
-
   } catch (err) {
     console.error("Failed to initialize Firebase-dependent app logic:", err);
     showNotification("Failed to load Firebase. Please refresh.");
@@ -150,37 +146,38 @@ async function initApp() {
   }
 }
 
-
 // ============================================
 // SEARCHBAR VISIBILITY FUNCTIONS
 // ============================================
 
 function showSearchbar() {
-  const searchContainer = document.querySelector('.search-container') || 
-                         document.querySelector('[class*="search"]') ||
-                         searchInput?.parentElement;
-  
+  const searchContainer =
+    document.querySelector(".search-container") ||
+    document.querySelector('[class*="search"]') ||
+    searchInput?.parentElement;
+
   if (searchContainer) {
-    searchContainer.classList.remove('hidden');
+    searchContainer.classList.remove("hidden");
   }
-  
+
   // Also show individual search elements if they exist
-  if (searchInput) searchInput.parentElement?.classList.remove('hidden');
-  if (searchButton) searchButton.classList.remove('hidden');
+  if (searchInput) searchInput.parentElement?.classList.remove("hidden");
+  if (searchButton) searchButton.classList.remove("hidden");
 }
 
 function hideSearchbar() {
-  const searchContainer = document.querySelector('.search-container') || 
-                         document.querySelector('[class*="search"]') ||
-                         searchInput?.parentElement;
-  
+  const searchContainer =
+    document.querySelector(".search-container") ||
+    document.querySelector('[class*="search"]') ||
+    searchInput?.parentElement;
+
   if (searchContainer) {
-    searchContainer.classList.add('hidden');
+    searchContainer.classList.add("hidden");
   }
-  
+
   // Also hide individual search elements if they exist
-  if (searchInput) searchInput.parentElement?.classList.add('hidden');
-  if (searchButton) searchButton.classList.add('hidden');
+  if (searchInput) searchInput.parentElement?.classList.add("hidden");
+  if (searchButton) searchButton.classList.add("hidden");
 }
 
 // ============================================
@@ -190,22 +187,22 @@ function hideSearchbar() {
 function showDashboard() {
   // Hide all views first
   hideAllViews();
-  
+
   // Show dashboard and all its sections
   const dashboardSections = [
-    'heroSection',
-    'categoryTitle', 
-    'dashboardView',
-    'featuredProverbs',
-    'ethicalSummarySection',
-    'communityContribution',
-    'footerSection'
+    "heroSection",
+    "categoryTitle",
+    "dashboardView",
+    "featuredProverbs",
+    "ethicalSummarySection",
+    "communityContribution",
+    "footerSection",
   ];
-  
-  dashboardSections.forEach(sectionId => {
+
+  dashboardSections.forEach((sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.classList.remove('hidden');
+      section.classList.remove("hidden");
     }
   });
 
@@ -229,12 +226,12 @@ function showDashboard() {
 function showProverbListView(title = "Proverbs") {
   // Hide all views first
   hideAllViews();
-  
+
   // Show only proverb list view
   if (proverbListView) {
-    proverbListView.classList.remove('hidden');
+    proverbListView.classList.remove("hidden");
   }
-  
+
   // Update title
   if (themeTitle) {
     themeTitle.textContent = title;
@@ -247,10 +244,10 @@ function showProverbListView(title = "Proverbs") {
 function showSearchView() {
   // Hide all views first
   hideAllViews();
-  
+
   // Show search view
   if (searchResultsView) {
-    searchResultsView.classList.remove('hidden');
+    searchResultsView.classList.remove("hidden");
   }
 
   // Show searchbar in search view
@@ -259,23 +256,23 @@ function showSearchView() {
 
 function showSection(sectionName) {
   // Handle special case for contribution button
-  if (sectionName === 'contributeBtn') {
+  if (sectionName === "contributeBtn") {
     showContributionModal();
     return;
   }
 
   // Hide all views first
   hideAllViews();
-  
+
   // Show specific section
   const section = document.getElementById(sectionName);
   if (section) {
-    section.classList.remove('hidden');
+    section.classList.remove("hidden");
   }
-  
+
   // Update nav highlighting
   updateNavHighlight(sectionName);
-  
+
   // Close sidebar
   closeSidebar();
 
@@ -285,46 +282,56 @@ function showSection(sectionName) {
 
 function hideAllViews() {
   const allSections = [
-    'heroSection',
-    'categoryTitle',
-    'dashboardView', 
-    'featuredProverbs',
-    'ethicalSummarySection',
-    'communityContribution',
-    'footerSection',
-    'proverbListView',
-    'searchResultsView',
-    'about',
-    'ethicalprinciples', 
-    'sourcesection',
-    'engageSection'
+    "heroSection",
+    "categoryTitle",
+    "dashboardView",
+    "featuredProverbs",
+    "ethicalSummarySection",
+    "communityContribution",
+    "footerSection",
+    "proverbListView",
+    "searchResultsView",
+    "about",
+    "ethicalprinciples",
+    "sourcesection",
+    "engageSection",
   ];
-  
-  allSections.forEach(sectionId => {
+
+  allSections.forEach((sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.classList.add('hidden');
+      section.classList.add("hidden");
     }
   });
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function updateNavHighlight(activeSection) {
   // Reset all nav links
-  document.querySelectorAll(".nav-link").forEach(link => {
+  document.querySelectorAll(".nav-link").forEach((link) => {
     link.classList.remove("text-primary", "font-medium");
     link.classList.add("text-gray-700");
   });
 
   // Highlight active link
   let activeLinkId = "";
-  switch(activeSection) {
-    case "about": activeLinkId = "aboutLink"; break;
-    case "dashboardView": activeLinkId = "homeLink"; break;
-    case "ethicalprinciples": activeLinkId = "ethicsLink"; break;
-    case "sourcesection": activeLinkId = "sourcesLink"; break;
-    default: activeLinkId = "homeLink"; break;
+  switch (activeSection) {
+    case "about":
+      activeLinkId = "aboutLink";
+      break;
+    case "dashboardView":
+      activeLinkId = "homeLink";
+      break;
+    case "ethicalprinciples":
+      activeLinkId = "ethicsLink";
+      break;
+    case "sourcesection":
+      activeLinkId = "sourcesLink";
+      break;
+    default:
+      activeLinkId = "homeLink";
+      break;
   }
 
   const activeLink = document.getElementById(activeLinkId);
@@ -346,30 +353,30 @@ function setupEventListeners() {
   const sourcesLink = document.getElementById("sourcesLink");
 
   if (homeLink) {
-    homeLink.addEventListener("click", function(event) {
+    homeLink.addEventListener("click", function (event) {
       event.preventDefault();
       showDashboard();
     });
   }
 
   if (aboutLink) {
-    aboutLink.addEventListener("click", function(event) {
+    aboutLink.addEventListener("click", function (event) {
       event.preventDefault();
-      showSection('about');
+      showSection("about");
     });
   }
 
   if (ethicsLink) {
-    ethicsLink.addEventListener("click", function(event) {
+    ethicsLink.addEventListener("click", function (event) {
       event.preventDefault();
-      showSection('ethicalprinciples');
+      showSection("ethicalprinciples");
     });
   }
 
   if (sourcesLink) {
-    sourcesLink.addEventListener("click", function(event) {
+    sourcesLink.addEventListener("click", function (event) {
       event.preventDefault();
-      showSection('sourcesection');
+      showSection("sourcesection");
     });
   }
 
@@ -378,20 +385,23 @@ function setupEventListeners() {
   if (closeSidebarBtn) closeSidebarBtn.addEventListener("click", closeSidebar);
 
   // Modal controls
-  if (closeProverbModalBtn) closeProverbModalBtn.addEventListener("click", closeProverbModal);
-  if (closeContributionBtn) closeContributionBtn.addEventListener("click", closeContribution);
+  if (closeProverbModalBtn)
+    closeProverbModalBtn.addEventListener("click", closeProverbModal);
+  if (closeContributionBtn)
+    closeContributionBtn.addEventListener("click", closeContribution);
 
   // Filter controls
   if (filterBtn) filterBtn.addEventListener("click", toggleFilterDropdown);
   if (applyFiltersBtn) applyFiltersBtn.addEventListener("click", applyFilters);
 
   // Back to dashboard controls
-  if (backToDashboardBtn) backToDashboardBtn.addEventListener("click", showDashboard);
+  if (backToDashboardBtn)
+    backToDashboardBtn.addEventListener("click", showDashboard);
   if (backFromSearch) backFromSearch.addEventListener("click", showDashboard);
 
   // Contribution
   if (contributeBtn) {
-    contributeBtn.addEventListener("click", function() {
+    contributeBtn.addEventListener("click", function () {
       showContributionModal();
     });
   }
@@ -403,30 +413,35 @@ function setupEventListeners() {
   // Search
   if (searchButton) searchButton.addEventListener("click", performSearch);
   if (clearSearch) clearSearch.addEventListener("click", showDashboard);
-  
+
   if (searchInput) {
-    searchInput.addEventListener("keypress", function(e) {
+    searchInput.addEventListener("keypress", function (e) {
       if (e.key === "Enter") performSearch();
     });
   }
 
   // Interpretation
-  if (interpretBtn) interpretBtn.addEventListener("click", generateInterpretation);
+  if (interpretBtn)
+    interpretBtn.addEventListener("click", generateInterpretation);
 
   // Theme box clicks (delegated)
   if (dashboardView) {
-    dashboardView.addEventListener("click", async function(event) {
+    dashboardView.addEventListener("click", async function (event) {
       const themeBox = event.target.closest(".theme-box");
       if (themeBox) {
         const theme = themeBox.dataset.theme;
         if (theme) {
           try {
             showNotification(`Loading proverbs for ${themes[theme].title}...`);
-            const proverbs = await window.firebaseService.getProverbsByTheme(theme);
+            const proverbs = await window.firebaseService.getProverbsByTheme(
+              theme
+            );
             allProverbs = proverbs;
             displayProverbs(proverbs, themes[theme].title);
             showProverbListView(themes[theme].title);
-            showNotification(`Displaying ${proverbs.length} proverbs for ${themes[theme].title}.`);
+            showNotification(
+              `Displaying ${proverbs.length} proverbs for ${themes[theme].title}.`
+            );
           } catch (error) {
             console.error("Error fetching themed proverbs:", error);
             showNotification("Failed to load themed proverbs.");
@@ -472,7 +487,8 @@ function closeProverbModal() {
   if (interpretationContainer) {
     interpretationContainer.classList.add("hidden");
   }
-  const interpretationTextElement = document.getElementById("interpretationText");
+  const interpretationTextElement =
+    document.getElementById("interpretationText");
   if (interpretationTextElement) {
     interpretationTextElement.textContent = "";
   }
@@ -500,10 +516,10 @@ function closeContribution() {
 
 function displayDashboard() {
   if (!dashboardView) return;
-  
+
   dashboardView.innerHTML = "";
-  
-  Object.keys(themes).forEach(key => {
+
+  Object.keys(themes).forEach((key) => {
     const theme = themes[key];
     const box = document.createElement("div");
     box.className = `theme-box ${theme.class} rounded p-6 flex items-center justify-center cursor-pointer`;
@@ -515,15 +531,16 @@ function displayDashboard() {
 
 function displayProverbs(proverbs, title) {
   if (!proverbListContainer) return;
-  
+
   proverbListContainer.innerHTML = "";
 
   if (proverbs.length === 0) {
-    proverbListContainer.innerHTML = '<p class="text-gray-500 text-center">No proverbs found.</p>';
+    proverbListContainer.innerHTML =
+      '<p class="text-gray-500 text-center">No proverbs found.</p>';
     return;
   }
 
-  proverbs.forEach(proverb => {
+  proverbs.forEach((proverb) => {
     const div = document.createElement("div");
     div.className = "bg-white rounded-lg shadow-md p-6 cursor-pointer";
     div.innerHTML = `
@@ -539,9 +556,9 @@ function displayProverbs(proverbs, title) {
 
 function showProverbDetails(proverbId) {
   console.log("Clicked proverb ID:", proverbId);
-  
-  const proverb = allProverbs.find(p => p.id === proverbId);
-  
+
+  const proverb = allProverbs.find((p) => p.id === proverbId);
+
   if (!proverb) {
     console.warn("Proverb not found for ID:", proverbId);
     return;
@@ -552,13 +569,15 @@ function showProverbDetails(proverbId) {
     proverbId: document.getElementById("proverbId"),
     proverbText: document.getElementById("proverbText"),
     literalMeaning: document.getElementById("literalMeaning"),
-    englishTranslation: document.getElementById("englishTranslation")
+    englishTranslation: document.getElementById("englishTranslation"),
   };
 
   if (elements.proverbId) elements.proverbId.textContent = proverb.id;
   if (elements.proverbText) elements.proverbText.textContent = proverb.meranaw;
-  if (elements.literalMeaning) elements.literalMeaning.textContent = proverb.literal_meaning;
-  if (elements.englishTranslation) elements.englishTranslation.textContent = proverb.english_translation;
+  if (elements.literalMeaning)
+    elements.literalMeaning.textContent = proverb.literal_meaning;
+  if (elements.englishTranslation)
+    elements.englishTranslation.textContent = proverb.english_translation;
 
   // Hide and clear interpretation
   if (interpretationContainer) interpretationContainer.classList.add("hidden");
@@ -583,13 +602,17 @@ function toggleFilterDropdown() {
 }
 
 function applyFilters() {
-  const checkboxes = document.querySelectorAll('#filterDropdown input[type="checkbox"]:checked');
+  const checkboxes = document.querySelectorAll(
+    '#filterDropdown input[type="checkbox"]:checked'
+  );
   activeFilters.clear();
-  checkboxes.forEach(cb => activeFilters.add(cb.value));
+  checkboxes.forEach((cb) => activeFilters.add(cb.value));
 
   console.log("Active Filters:", Array.from(activeFilters));
-  
-  const currentlyFiltered = allProverbs.filter(proverb => activeFilters.has(proverb.theme));
+
+  const currentlyFiltered = allProverbs.filter((proverb) =>
+    activeFilters.has(proverb.theme)
+  );
   displayProverbs(currentlyFiltered, "Filtered Results");
   showProverbListView("Filtered Results");
   toggleFilterDropdown();
@@ -613,32 +636,51 @@ async function performSearch() {
   showSearchView();
 
   try {
-    const response = await fetch(`${BASE_URL}/api/search?query=${encodeURIComponent(query)}`);
-    
+    const response = await fetch(
+      `${API_BASE}/api/search?query=${encodeURIComponent(query)}`
+    );
+
     if (!response.ok) throw new Error("Search request failed.");
 
     const jsonData = await response.json();
     const proverbs = jsonData.data || jsonData;
 
     if (proverbs.length > 0) {
-      searchResults.innerHTML = proverbs.map(proverb => `
-        <div class="proverb-item p-4 border border-gray-200 rounded cursor-pointer" data-id="${proverb.id}">
+      searchResults.innerHTML = proverbs
+        .map(
+          (proverb) => `
+        <div class="proverb-item p-4 border border-gray-200 rounded cursor-pointer" data-id="${
+          proverb.id
+        }">
           <div class="flex justify-between">
-            <h3 class="text-lg font-medium text-primary">${highlightText(proverb.meranaw || proverb.meranaw_proverb || "", query)}</h3>
-            <span class="text-xs text-gray-500">${proverb.search_type || ""}</span>
+            <h3 class="text-lg font-medium text-primary">${highlightText(
+              proverb.meranaw || proverb.meranaw_proverb || "",
+              query
+            )}</h3>
+            <span class="text-xs text-gray-500">${
+              proverb.search_type || ""
+            }</span>
           </div>
           <p class="text-gray-600 italic">
-            <strong>English Translation:</strong> ${highlightText(proverb.english_translation || "", query)}
+            <strong>English Translation:</strong> ${highlightText(
+              proverb.english_translation || "",
+              query
+            )}
           </p>
-          <p class="text-sm text-blue-600 mt-1">Theme: ${highlightText(proverb.Theme || "", query)}</p>
+          <p class="text-sm text-blue-600 mt-1">Theme: ${highlightText(
+            proverb.Theme || "",
+            query
+          )}</p>
         </div>
-      `).join("");
+      `
+        )
+        .join("");
 
       // Add click handlers
-      searchResults.querySelectorAll(".proverb-item").forEach(item => {
+      searchResults.querySelectorAll(".proverb-item").forEach((item) => {
         item.addEventListener("click", () => {
           const id = item.getAttribute("data-id");
-          const proverb = proverbs.find(p => p.id === id);
+          const proverb = proverbs.find((p) => p.id === id);
           if (proverb) {
             showProverbDetails(id);
           }
@@ -653,7 +695,8 @@ async function performSearch() {
     }
   } catch (error) {
     console.error("Error fetching search results:", error);
-    searchResults.innerHTML = '<p class="text-red-500">Something went wrong. Please try again.</p>';
+    searchResults.innerHTML =
+      '<p class="text-red-500">Something went wrong. Please try again.</p>';
   }
 }
 
@@ -698,12 +741,20 @@ async function generateInterpretation() {
     literalMeaning: document.getElementById("literalMeaning"),
     englishTranslation: document.getElementById("englishTranslation"),
     interpretationOutput: document.getElementById("interpretationText"),
-    container: document.getElementById("interpretationContainer")
+    container: document.getElementById("interpretationContainer"),
   };
 
   // Validate elements
-  if (!elements.proverbText || !elements.literalMeaning || !elements.englishTranslation || !elements.interpretationOutput || !elements.container) {
-    console.error("One or more required elements for interpretation are missing in the DOM.");
+  if (
+    !elements.proverbText ||
+    !elements.literalMeaning ||
+    !elements.englishTranslation ||
+    !elements.interpretationOutput ||
+    !elements.container
+  ) {
+    console.error(
+      "One or more required elements for interpretation are missing in the DOM."
+    );
     showNotification("Error: Necessary proverb details elements not found.");
     return;
   }
@@ -716,25 +767,30 @@ async function generateInterpretation() {
   elements.container.classList.remove("hidden");
 
   try {
-    const response = await fetch(await fetch(`${BASE_URL}/api/meranaw-interpreter`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        data: [proverbText, englishTranslation, literalMeaning],
-      }),
-    });
+    const response = await fetch(
+      "${API_BASE}/api/meranaw-interpreter",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          data: [proverbText, englishTranslation, literalMeaning],
+        }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const result = await response.json();
-    const generatedInterpretation = result.data?.[0] || "Failed to generate interpretation.";
+    const generatedInterpretation =
+      result.data?.[0] || "Failed to generate interpretation.";
 
     elements.interpretationOutput.textContent = generatedInterpretation;
   } catch (error) {
     console.error("Error generating interpretation:", error);
-    elements.interpretationOutput.textContent = "An error occurred. Please try again.";
+    elements.interpretationOutput.textContent =
+      "An error occurred. Please try again.";
   }
 }
 
@@ -750,7 +806,12 @@ async function playAudio(text, lang) {
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/api/speak_proverb?text=${encodeURIComponent(text)}&lang=${lang}`);
+    const response = await fetch(
+      `${API_BASE}/api/speak_proverb?text=${encodeURIComponent(
+        text
+      )}&lang=${lang}`
+    );
+
     if (!response.ok) {
       const errorData = await response.json();
       alert(`Error playing audio: ${errorData.detail || response.statusText}`);
@@ -816,7 +877,7 @@ function showNotification(message) {
     notification.classList.remove("hidden");
     notification.classList.remove("slideOut");
     notification.classList.add("notification");
-    
+
     setTimeout(() => {
       notification.classList.add("slideOut");
       notification.classList.remove("notification");
