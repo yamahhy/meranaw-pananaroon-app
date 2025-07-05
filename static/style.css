@@ -1,0 +1,245 @@
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Icon Configuration */
+:where([class^="ri-"])::before {
+  content: "\f3c2";
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #6f1926 0%, #942031 50%, #e5c121 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  display: inline-block; /* Ensure it's rendered properly */
+}
+
+.gradient-border {
+  position: relative;
+  z-index: 1;
+  border-radius: 8px;
+  background: white; /* Inner content background */
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 2px; /* Border thickness */
+    border-radius: 8px;
+    background: linear-gradient(90deg, #6f1926 0%, #942031 50%, #e5c121 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    z-index: -1;
+    pointer-events: none;
+  }
+}
+.cultural-context-bg {
+  background-image: url("https://narrastudio.com/cdn/shop/articles/Narra_Studio_Malongs-33.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 3rem 1rem;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-box {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.theme-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Theme Box Fixes - Adding backgrounds */
+.theme-box {
+  transition: all 0.3s ease;
+  border-width: 1px;
+}
+.theme-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.leadership-box {
+  border-color: rgba(111, 25, 38, 0.5);
+  color: rgb(111, 25, 38);
+}
+.leadership-box:hover {
+  background-color: rgba(111, 25, 38, 0.05);
+}
+
+.conflict-resolution-box {
+  border-color: rgba(229, 193, 33, 0.5);
+  color: #9b7f00;
+}
+.conflict-resolution-box:hover {
+  background-color: rgba(229, 193, 33, 0.05);
+}
+
+.argumentation-box {
+  border-color: rgba(148, 32, 49, 0.5);
+  color: rgb(148, 32, 49);
+}
+.argumentation-box:hover {
+  background-color: rgba(148, 32, 49, 0.05);
+}
+
+.death-sermon-box {
+  border-color: rgba(229, 193, 33, 0.5);
+  color: #9b7f00;
+}
+.death-sermon-box:hover {
+  background-color: rgba(229, 193, 33, 0.05);
+}
+
+.enthronement-genealogy-box {
+  border-color: rgba(111, 25, 38, 0.5);
+  color: rgb(111, 25, 38);
+}
+.enthronement-genealogy-box:hover {
+  background-color: rgba(111, 25, 38, 0.05);
+}
+
+.courtship-marriage-box {
+  border-color: rgba(229, 193, 33, 0.5);
+  color: #9b7f00;
+}
+.courtship-marriage-box:hover {
+  background-color: rgba(229, 193, 33, 0.05);
+}
+
+.moral-teaching-box {
+  border-color: rgba(148, 32, 49, 0.5);
+  color: rgb(148, 32, 49);
+}
+.moral-teaching-box:hover {
+  background-color: rgba(148, 32, 49, 0.05);
+}
+
+.sidebar {
+  transition: transform 0.3s ease;
+}
+.proverb-item {
+  transition: all 0.2s ease;
+}
+.proverb-item:hover {
+  background-color: rgba(229, 193, 33, 0.05);
+}
+.notification {
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+.notification.show {
+  transform: translateY(0);
+}
+.modal {
+  transition: opacity 0.3s ease;
+}
+
+/* Fixed Custom checkbox styling */
+.custom-checkbox {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  padding-left: 30px; /* Give space for the checkbox */
+  display: flex;
+  align-items: center;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 1px solid #6f1926;
+  border-radius: 4px;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+  background-color: rgba(111, 25, 38, 0.05);
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #6f1926;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.custom-checkbox .checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 11px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.filterDropdown {
+  /* Add this class to your dropdown in HTML */
+  display: none;
+  /* Add transition properties if desired */
+}
+
+.filterDropdown.show {
+  display: block;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.searchInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(139, 38, 53, 0.2);
+}
+
+.dashboard-only {
+    display: block;
+}
+.dashboard-only.hidden {
+    display: none !important;
+}
+
+.scroll-offset {
+  scroll-margin-top: 80px; /* adjust for header height */
+}
+
