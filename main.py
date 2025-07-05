@@ -23,15 +23,21 @@ import uvicorn  # <-- For running the app directly
 app = FastAPI()
 collection_name = "meranaw_proverbs"
 
-# Enable CORS
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:3000",  # dev frontend
+    "http://localhost:5173",  # Vite
+    "https://meranaw-pananaroon.vercel.app"  # your production frontend
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with frontend URL in production
+    allow_origins=origins,  # or use ["*"] to allow all during testing
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # Print supported languages on server start
 print("Supported gTTS languages:")
 print(tts_langs())
