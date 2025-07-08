@@ -25,15 +25,14 @@ collection_name = "meranaw_proverbs"
 
 from fastapi.middleware.cors import CORSMiddleware
 
-origins = [
-    "http://localhost:3000",  # dev frontend
-    "http://localhost:5173",  # Vite
-    "https://meranaw-pananaroon.vercel.app"  # your production frontend
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # or use ["*"] to allow all during testing
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "https://meranaw-pananaroon.vercel.app/",
+        "https://meranaw-frontend.onrender.com", 
+    ],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -140,7 +139,3 @@ async def speak_proverb(text: str = Query(...), lang: str = Query("mrw")):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# -------------------- Run with Uvicorn --------------------
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))  # fallback to 10000 if PORT isn't set
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
