@@ -49,12 +49,6 @@ token = "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"  # Replace with your token
 
 model_id = "yamahhy/meranaw_interpreter_model"
 
-tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=False, token=token)
-model = AutoModelForSeq2SeqLM.from_pretrained(model_id, token=token)
-
-generator = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
-
-
 # -------------------- MMS TTS Initialization --------------------
 try:
     mms_instance = MMS()
@@ -81,6 +75,10 @@ class InterpretRequest(BaseModel):
 # --- Interpretation Generation ---
 @app.post("/api/meranaw-interpreter")
 async def interpret_proverb(req: InterpretRequest):
+    tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=False, token=token)
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_id, token=token)
+
+    generator = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
     try:
         meranaw, english_translation, interpretation = req.data
     except ValueError:
