@@ -42,12 +42,12 @@ print("Supported gTTS languages:")
 print(tts_langs())
 
 # -------------------- Load T5 Model --------------------
-from huggingface_hub import HfApi, HfFolder
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+# from huggingface_hub import HfApi, HfFolder
+# from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 
-token = "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"  # Replace with your token
+# token = "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"  # Replace with your token
 
-model_id = "yamahhy/meranaw_interpreter_model"
+#model_id = "yamahhy/meranaw_interpreter_model"
 
 # -------------------- MMS TTS Initialization --------------------
 try:
@@ -67,35 +67,35 @@ def truncate_text(text: str, max_length: int = MAX_PROMPT_LENGTH) -> str:
     return text
 
 # -------------------- Data Models --------------------
-class InterpretRequest(BaseModel):
-    data: List  # expects [meranaw, englishTranslation, interpretation]
+# class InterpretRequest(BaseModel):
+#     data: List  # expects [meranaw, englishTranslation, interpretation]
 
 # -------------------- Routes --------------------
 
 # --- Interpretation Generation ---
-@app.post("/api/meranaw-interpreter")
-async def interpret_proverb(req: InterpretRequest):
-    tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=False, token=token)
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_id, token=token)
+#@app.post("/api/meranaw-interpreter")
+#async def interpret_proverb(req: InterpretRequest):
+#    tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=False, token=token)
+#   model = AutoModelForSeq2SeqLM.from_pretrained(model_id, token=token)
 
-    generator = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
-    try:
-        meranaw, english_translation, interpretation = req.data
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Request data must contain exactly 3 elements.")
+#    generator = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
+#    try:
+#       meranaw, english_translation, interpretation = req.data
+ #   except ValueError:
+  #      raise HTTPException(status_code=400, detail="Request data must contain exactly 3 elements.")
 
-    prompt = (
-        f"interpret: Meranaw Proverb: {meranaw}\n"
-        f"English Translation: {english_translation}\n"
-        f"Interpretation: {interpretation}\n"
-        f"Interpretation:"
-    )
-    prompt = truncate_text(prompt)
+#    prompt = (
+ #       f"interpret: Meranaw Proverb: {meranaw}\n"
+  #      f"English Translation: {english_translation}\n"
+   #     f"Interpretation: {interpretation}\n"
+    #    f"Interpretation:"
+   # )
+    #prompt = truncate_text(prompt)
     
-    result = generator(prompt, max_length=64, num_beams=3, repetition_penalty=2.0, no_repeat_ngram_size=2)
-    generated_interpretation = result[0]['generated_text']
+    #result = generator(prompt, max_length=64, num_beams=3, repetition_penalty=2.0, no_repeat_ngram_size=2)
+    #generated_interpretation = result[0]['generated_text']
     
-    return {"data": [generated_interpretation]}
+    #return {"data": [generated_interpretation]}
 
 
 # --- Semantic + Keyword + Theme Search ---
